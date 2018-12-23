@@ -164,4 +164,8 @@ public class DetailPage extends AppCompatActivity {
         tag2.setText(cursor.getString(cursor.getColumnIndex("subLabel")));
         mTextview[7].setText(cursor.getString(cursor.getColumnIndex("url")));
     }
+
+    private void goBack(View view) {
+        DetailPage.this.finish();
+    }
 }
