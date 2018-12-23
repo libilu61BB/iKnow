@@ -77,5 +77,6 @@ public class MySql extends SQLiteOpenHelper {
     public void Delete(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TableName, null, null);
+        db.close();
     }
 }
