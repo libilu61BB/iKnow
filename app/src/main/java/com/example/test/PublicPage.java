@@ -27,20 +27,6 @@ public class PublicPage extends AppCompatActivity  {
     Button[] dateBtns = new Button[14];
     int[] date = new int[3];
     String username;
-    /*
-        Activity activity1 = new Activity(1,8,0,10,0,"学生节真好玩あ哈哈哈哈哈哈哈哈哈哈哈哈哈哈","文体","文艺","节目","大礼堂","生科","aaaa",2030,3,4,"顶级群落");
-        Activity activity2 = new Activity(2,0,0,24,0,"编程序真TM好玩啊哈水电费的说法呢发送到哈","科创","计算机","展览","没啥地点","拒绝熬夜组","www.kengdie.com",2018,11,17,"拒绝熬夜");
-        Activity activity3 = new Activity(3,16 ,30,20,40,"生命学院学生节欢迎大家一起来看很好看的","社工","生命","学生节","大礼堂","生命学院学生会","www.kengdie.com",2018,11,20,"什么玩意儿");
-        Activity activity4 = new Activity(4,12,0,20,0,"赶紧去学习吧哈哈哈哈哈哈哈哈哈哈哈哈","学习","熬夜","工作","#10 618","我","www.kengdie.com",2018,11,11,"怎么肥四");
-        Activity[] Day1 = {activity1,activity2,activity4};
-        Activity[] Day2 = {activity1,activity3,activity4};
-        Activity[] Day3 = {activity2,activity2,activity4};
-        Activity[] Day4 = {activity1,activity2,activity3};
-        Activity[] Day5 = {activity1,activity2,activity3,activity4};
-        Activity[] Day6 = {activity2,activity4};
-        Activity[] Day7 = {activity1,activity2};
-        Activity[][] activities = {Day1,Day2,Day3,Day4,Day5,Day6,Day7,Day1,Day2,Day3,Day4,Day5,Day6,Day7};
-    */
     List<Activity> actList = new ArrayList<Activity>();
     Activity temp = new Activity();
     int i = 0;

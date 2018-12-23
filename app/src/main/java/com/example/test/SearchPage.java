@@ -37,11 +37,6 @@ public class SearchPage extends AppCompatActivity {
             "毕业剧","philips","Python"};
     private static String[] labelNames = {"科创","计算机","体育","实践","外语","经济","创业","文学","电影","志愿",
             "艺术","讲座","学生节","展览","赛事","演出","全部标签"};
-    Activity activity1 = new Activity(1,8,0,10,0,"学生节真好玩あ哈哈哈哈哈哈哈哈哈哈哈哈哈哈","文体","文艺","节目","大礼堂","生科","aaaa",2030,3,4,"顶级群落");
-    Activity activity2 = new Activity(2,0,0,24,0,"编程序真TM好玩啊哈水电费的说法呢发送到哈","科创","计算机","展览","没啥地点","拒绝熬夜组","www.kengdie.com",2018,11,17,"拒绝熬夜");
-    Activity activity3 = new Activity(3,16 ,30,20,40,"生命学院学生节欢迎大家一起来看很好看的","社工","生命","学生节","大礼堂","生命学院学生会","www.kengdie.com",2018,11,20,"什么玩意儿");
-    Activity activity4 = new Activity(4,12,0,20,0,"赶紧去学习吧哈哈哈哈哈哈哈哈哈哈哈哈","学习","熬夜","工作","#10 618","我","www.kengdie.com",2018,11,11,"怎么肥四");
-    Activity[] Result1 = {activity1,activity2,activity3,activity4,activity1,activity2,activity4,activity1,activity2,activity4,activity1,activity2,activity4};
     List<Activity> acResult = new ArrayList<Activity>();
     Activity temp = new Activity();
     private LinearLayout historyView, resultView, switchView, cover, resultList;
