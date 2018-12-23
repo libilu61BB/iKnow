@@ -57,7 +57,7 @@ public class LabelForEvent extends AppCompatActivity {
     //计数所选主题标签数目，副标签数目，活动形式标签数目并初始化为0
     int mainCount = 0, subCount = 0, activityCount = 0;
     private String MainLabel,SecondLabel,ThemeLabel;
-    Boolean flag1=false,flag2=false,flag3=false;
+    Boolean flag1=false,flag2=false,flag3=false,savelabelFlag=false;
     //定义数组存储各个按钮的id
     Integer[] ButtonId = new Integer[]{
             R.id.Button_Main_Sci,R.id.Button_Main_Computer,R.id.Button_Main_PE,R.id.Button_Main_Practice,R.id.Button_Main_English,R.id.Button_Main_Economic,
@@ -66,14 +66,12 @@ public class LabelForEvent extends AppCompatActivity {
             R.id.Button_Sub_Chuangye,R.id.Button_Sub_Literature,R.id.Button_Sub_Movie,R.id.Button_Sub_Volunteer,R.id.Button_Sub_Art,
             R.id.Button_Activity_Lecture,R.id.Button_Activity_Xsj,R.id.Button_Activity_Exhibition,R.id.Button_Activity_Competition,R.id.Button_Activity_Performance
     };
-
     //定义数组存储选中状态下的标签图片id
     Integer[] choosedImage = new Integer[]{
             button_sci_del,button_computer_del,button_pe_del,button_practice_del,button_english_del,button_economic_del,
             button_chuangye_del,button_literature_del,button_movie_del,button_volunteer_del,button_art_del,
             button_lecture_del,button_xsj_del,button_exhibition_del,button_competition_del,button_performance_del
     };
-
     //定义数组存储选中状态下的标签图片id
     Integer[] unchoosedImage = new Integer[]{
             button_sci,button_computer,button_pe,button_practice,button_english,button_economic,
@@ -300,6 +298,7 @@ public class LabelForEvent extends AppCompatActivity {
         }
         Intent intent=new Intent(LabelForEvent.this,CreatActivity.class);
         if(flag1==true & flag2==true & flag3==true){  //三类标签都选择成功,上传数据
+            savelabelFlag=true;
             intent.putExtra("MainLabel",MainLabel);
             intent.putExtra("SecondLabel",SecondLabel);
             intent.putExtra("ThemeLabel",ThemeLabel);
@@ -330,7 +329,6 @@ public class LabelForEvent extends AppCompatActivity {
 
     //监测哪个标签被点击
 
-
     /*public void SciClicked(View view)
     {
         ImageButton SciBtn = (ImageButton)findViewById(R.id.Button_Sci);
@@ -350,6 +348,12 @@ public class LabelForEvent extends AppCompatActivity {
 
     public void goBack(View view)
     {
+        if(savelabelFlag==false){Intent intent=new Intent(LabelForEvent.this,CreatActivity.class);
+            intent.putExtra("MainLabel","-");
+            intent.putExtra("SecondLabel","-");
+            intent.putExtra("ThemeLabel","-");
+            LabelForEvent.this.setResult(RESULT_OK, intent);}
+
         finish();
     }
 }
