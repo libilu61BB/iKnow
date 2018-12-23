@@ -297,9 +297,6 @@ public class SetLabelForUser extends AppCompatActivity {
 
         //将更改后的标签写入本地文件
         /*File file = new File(Environment.getExternalStorageDirectory(),"Tag.txt");*/
-
-
-
         try{
             JSONObject UserInformation = new JSONObject(GetData("UserInformation.txt"));
             char[] tag = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -327,9 +324,6 @@ public class SetLabelForUser extends AppCompatActivity {
             Message.setText("网络连接失败！");
             Message.setVisibility(View.VISIBLE);
         }
-
-
-
 
     }
 

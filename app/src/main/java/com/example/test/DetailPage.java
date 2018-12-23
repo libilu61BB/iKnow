@@ -57,7 +57,6 @@ public class DetailPage extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(DetailPage.this, PrivatePage.class);
                 startActivity(intent);
-                DetailPage.this.finish();
             }
         });
         lastButton.setOnClickListener(new View.OnClickListener(){
@@ -72,7 +71,6 @@ public class DetailPage extends AppCompatActivity {
                 }
                 Intent intent = new Intent(DetailPage.this, PrivatePage.class);
                 startActivity(intent);
-                DetailPage.this.finish();
             }
         });
         setActivity();
@@ -103,10 +101,10 @@ public class DetailPage extends AppCompatActivity {
             try{
                 JSONObject Json = new JSONObject();
                 Json.put("Username", Username);
-                Json.put("ActivityId", String.valueOf(Id));
+                Json.put("ActivityID", String.valueOf(Id));
                 String content = String.valueOf(Json);
 
-                URL url = new URL("https://iknow.gycis.me:8443");//修改成删除User的个人活动的URL地址-----------
+                URL url = new URL("https://iknow.gycis.me:8443/updateData/deletePrivateActivity");
                 HttpURLConnection connection =  (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setConnectTimeout(5000);

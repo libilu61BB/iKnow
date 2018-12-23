@@ -3,15 +3,18 @@ package com.example.test;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class SettingPage extends AppCompatActivity {
-    ImageButton labelBtn1,publishBtn1,accountBtn1,contactBtn1;
+import java.io.File;
 
-    Button publicBtn,privateBtn,labelBtn2,publishBtn2,accountBtn2,contactBtn2;
+public class SettingPage extends AppCompatActivity {
+    ImageButton labelBtn1,publishBtn1,accountBtn1,contactBtn1,logoutBtn1;
+
+    Button publicBtn,privateBtn,labelBtn2,publishBtn2,accountBtn2,contactBtn2,logoutBtn2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +29,9 @@ public class SettingPage extends AppCompatActivity {
         contactBtn2 = (Button)findViewById(R.id.ButtonContactUs);
         publicBtn= (Button)findViewById(R.id.PublicButton);
         privateBtn= (Button)findViewById(R.id.PrivateButton);
+
+        logoutBtn2 = (Button)findViewById(R.id.ButtonLogout);
+        logoutBtn1 = (ImageButton)findViewById(R.id.turntoLogin);
 
 
         //发布消息页面
@@ -113,6 +119,49 @@ public class SettingPage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent2=new Intent(SettingPage.this,PrivatePage.class);
                 startActivity(intent2);
+                SettingPage.this.finish();
+            };
+        });
+
+        //退出登录
+        logoutBtn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MySql mysql = new MySql(SettingPage.this);
+                mysql.Delete();
+                File file = new File(Environment.getExternalStorageDirectory(),"UserInformation.txt");
+                try {
+                    if(file.isFile() && file.exists()){
+                        file.delete();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                Intent intent=new Intent(SettingPage.this,LoginPage.class);
+                startActivity(intent);
+                SettingPage.this.finish();
+            };
+        });
+
+        //退出登录
+        logoutBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MySql mysql = new MySql(SettingPage.this);
+                mysql.Delete();
+                File file = new File(Environment.getExternalStorageDirectory(),"UserInformation.txt");
+                try {
+                    if(file.isFile() && file.exists()){
+                        file.delete();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+                Intent intent=new Intent(SettingPage.this,LoginPage.class);
+                startActivity(intent);
                 SettingPage.this.finish();
             };
         });
