@@ -1,6 +1,7 @@
 package com.example.test;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,8 +9,11 @@ import android.os.Bundle;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.util.Log;
 
 public class InitialPage extends AppCompatActivity {
+    private MySql mysql;
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,13 +24,13 @@ public class InitialPage extends AppCompatActivity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                File file = new File(Environment.getExternalStorageDirectory(),"Username.txt");
+                File file = new File(Environment.getExternalStorageDirectory(),"UserInformation.txt");
                 if (file.exists())
                     gotoPrivatePage();
                 else
                     gotoLoginPage();
             }
-        },3000);
+        },2000);
     }
 
     public void gotoPrivatePage() {

@@ -63,7 +63,7 @@ public class SetLabelForUser extends AppCompatActivity {
 
     private boolean setLabelSucceedFlag = false;
 
-    String UserName = getUserName();
+    String UserName;
     int LabelNum = 16;
 
     //定义一个布尔数组存储标签的选中状态:0~10储存活动主题标签，11~15储存活动形式标签
@@ -111,10 +111,11 @@ public class SetLabelForUser extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_label_for_user);
+        getUserName();
 
 
 
-        File file = new File(Environment.getExternalStorageDirectory(),"Tag.txt");
+        /*File file = new File(Environment.getExternalStorageDirectory(),"Tag.txt");
 
         JSONObject Json = new JSONObject();
         try{
@@ -137,7 +138,7 @@ public class SetLabelForUser extends AppCompatActivity {
 
         }catch(Exception e){
             e.printStackTrace();
-        }
+        }*/
 
         //每次打开标签设置页面加载标签
         refreshLabel();
@@ -183,9 +184,13 @@ public class SetLabelForUser extends AppCompatActivity {
     /*---------------------------------------------------------*/
 
     //获得用户名
-    public String getUserName(){
-        String User = "q";
-        return User;
+    public void getUserName(){
+        try{
+            JSONObject ThisUser = new JSONObject(GetData("UserInformation.txt"));
+            UserName = ThisUser.getString("Username");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -193,18 +198,18 @@ public class SetLabelForUser extends AppCompatActivity {
     public void refreshLabel()
     {
         //获得本地文件中的Tag1~Tag16
-        String data = GetData("Tag.txt");
-        Log.i("Connection",data);
         try{
-            JSONObject Json = new JSONObject(data);
-            for(int num = 1;num < 17; num ++){
-                String a = Json.getString("Tag"+String.valueOf(num));
-                if(a == "true"){
-                    UserLabel[num - 1] = true;
+            JSONObject data = new JSONObject(GetData("UserInformation.txt"));
+            Log.i("Connection",data.toString());
+            String Tag = data.getString("Tag");
+
+            for(int num = 0;num < 16; num ++){
+                char a = Tag.charAt(num);
+                if(a == '1'){
+                    UserLabel[num] = true;
                     UserLabelCount ++;
                 }
-
-                else UserLabel[num - 1] = false;
+                else UserLabel[num] = false;
             }
 
 
@@ -291,26 +296,22 @@ public class SetLabelForUser extends AppCompatActivity {
 
 
         //将更改后的标签写入本地文件
-        File file = new File(Environment.getExternalStorageDirectory(),"Tag.txt");
+        /*File file = new File(Environment.getExternalStorageDirectory(),"Tag.txt");*/
 
-        JSONObject Json = new JSONObject();
+
+
         try{
-            /*if (!file.exists()){
-                file.createNewFile();
-            }*/
+            JSONObject UserInformation = new JSONObject(GetData("UserInformation.txt"));
+            char[] tag = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+                    '0', '0', '0', '0',};
             for(int i = 0; i < 16; i++){
                 if(UserLabel[i]){
-                    Json.put("Tag"+String.valueOf(i+1), true);
-                }
-                else{
-                    Json.put("Tag"+String.valueOf(i+1), false);
+                    tag[i] = '1';
                 }
             }
-
-            String content = String.valueOf(Json);
-            FileOutputStream os = new FileOutputStream(file);
-            os.write(content.getBytes());
-            os.close();
+            String Tag = String.valueOf(tag);
+            UserInformation.put("Tag",Tag);
+            WriteToFile("UserInformation.txt", UserInformation.toString());
         }catch(Exception e){
             e.printStackTrace();
             setLabelSucceedFlag = false;
@@ -418,6 +419,19 @@ public class SetLabelForUser extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void WriteToFile(String filename, String content){
+        try{
+            File file = new File(Environment.getExternalStorageDirectory(),filename);
+            if(!file.exists())
+                file.createNewFile();
+            FileOutputStream os = new FileOutputStream(file);
+            os.write(content.getBytes());
+            os.close();
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

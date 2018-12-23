@@ -1,5 +1,6 @@
 package com.example.test;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.Intent;
+
+import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -24,7 +29,7 @@ public class RegisterPage extends AppCompatActivity {
     private Button RegisterButton;
     private Spinner DepartmentSpinner;
     private EditText Username, Nickname, Password, Password2;
-    private TextView DepartmentText, UsernameText, NicknameText, PasswordText, Password2Text;
+    private TextView DepartmentText, UsernameText, NicknameText, PasswordText, Password2Text,registerSucced;
     private User Me = new User();
     private boolean RegisterSucceedFlag = false;
 
@@ -131,6 +136,7 @@ public class RegisterPage extends AppCompatActivity {
         NicknameText = findViewById(R.id.NicknameError);
         PasswordText = findViewById(R.id.PasswordError);
         Password2Text = findViewById(R.id.Password2Error);
+        registerSucced = findViewById(R.id.registerSucceed);
 
         RegisterButton = findViewById(R.id.Register);
         RegisterButton.setOnClickListener(new View.OnClickListener(){
@@ -168,13 +174,22 @@ public class RegisterPage extends AppCompatActivity {
                     }catch(Exception e){
                         e.printStackTrace();
                     }
-                    if(RegisterSucceedFlag == false){
+                    if(!RegisterSucceedFlag){
                         UsernameText.setText("对不起，此用户名已存在!");
                         UsernameText.setVisibility(View.VISIBLE);
                     }
                     else{
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if(RegisterSucceedFlag)
+                                    registerSucced.setVisibility(View.VISIBLE);
+                            }
+                        },2000);
                         Intent intent = new Intent(RegisterPage.this, LoginPage.class);
                         startActivity(intent);
+                        RegisterPage.this.finish();
                     }
                 }
             }
