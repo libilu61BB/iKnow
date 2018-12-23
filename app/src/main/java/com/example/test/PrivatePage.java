@@ -110,6 +110,8 @@ public class PrivatePage extends AppCompatActivity {
         Init();
 
         /*mysql = new MySql(this);
+        mysql.Insert(20,2018,12,23,8,15,9,45,"这是活动1","主标签",
+                "副标签","活动标签","清华大学","拒绝熬夜组","www.baidu.com","圣诞聚餐20");
         mysql.Insert(1,2018,12,25,8,15,9,45,"这是活动1","主标签",
                 "副标签","活动标签","清华大学","拒绝熬夜组",null,"圣诞聚餐1");
         mysql.Delete(1);
@@ -139,6 +141,7 @@ public class PrivatePage extends AppCompatActivity {
                 "副标签","活动标签","清华大学","拒绝熬夜组",null,"圣诞聚餐13");
         mysql.Insert(14,2019,1,5,16,15,16,45,"这是活动3","主标签",
                 "副标签","活动标签","清华大学","拒绝熬夜组",null,"圣诞聚餐14");*/
+        ShowActivity();
     }
 
     //点击"公共日历"按钮，进入“公共日历”页面
