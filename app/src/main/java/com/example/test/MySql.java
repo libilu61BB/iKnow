@@ -65,10 +65,17 @@ public class MySql extends SQLiteOpenHelper {
         cv.put("url", url);
         cv.put("name", name);
         db.insert(TableName, null, cv);
+        db.close();
     }
 
     public void Delete(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TableName, "Id = ?", new String[] {String.valueOf(id)});
+        db.close();
+    }
+
+    public void Delete(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TableName, null, null);
     }
 }

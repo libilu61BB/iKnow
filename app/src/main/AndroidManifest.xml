@@ -24,18 +24,18 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".SettingPage" />
         <activity android:name=".PrivatePage">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".RegisterPage">
 
         </activity>
         <activity android:name=".FeedbackPage" />
         <activity android:name=".InitialPage">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".LoginPage">
 
