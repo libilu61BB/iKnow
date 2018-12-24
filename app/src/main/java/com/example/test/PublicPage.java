@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +14,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -28,7 +36,6 @@ public class PublicPage extends AppCompatActivity  {
     int[] date = new int[3];
     String username;
     List<Activity> actList = new ArrayList<Activity>();
-    Activity temp = new Activity();
     int i = 0;
     private LinearLayout dateColumn;
     private LinearLayout publicActivity;
@@ -37,6 +44,8 @@ public class PublicPage extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //WriteToFile("UseInformation.txt","q");
+        //username = getUsername();
         username = "q";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_public_page);
@@ -53,12 +62,15 @@ public class PublicPage extends AppCompatActivity  {
 
         publicActivity = findViewById(R.id.publicActivity);
         try{
-            Thread.sleep(500);
+            Thread.sleep(800);
         }catch(InterruptedException e){
             e.printStackTrace();
         }
         initPublicActivity();
     }
+    /**
+     * 向后端发送时间和用户，返回符合条件的事件
+     */
     protected void GetActivity(final String s){
         new Thread(new Runnable() {
             @Override
@@ -93,8 +105,11 @@ public class PublicPage extends AppCompatActivity  {
                         JSONObject acList = new JSONObject(thisJson.getString("Activity"));
                         JSONObject[] ac = new JSONObject[acNum];
                         actList.clear();
+                        List<Activity> tempActList = new ArrayList<Activity>();
+                        System.out.println(actList);
                         for(int i = 0; i < acNum; i++){
                             ac[i] = new JSONObject(acList.getString("Activity"+String.valueOf(i+1)));
+                            Activity temp = new Activity();
                             temp.setActivityId(ac[i].getInt("Id"));
                             temp.setStartHour(ac[i].getInt("Start_hour"));
                             temp.setStartMinute(ac[i].getInt("Start_minute"));
@@ -111,8 +126,11 @@ public class PublicPage extends AppCompatActivity  {
                             temp.setActivityLabel(ac[i].getString("Tag3"));
                             temp.setIntroduction(ac[i].getString("Introduction"));
                             temp.setUrl(ac[i].getString("Url"));
-                            actList.add(temp);
+                            tempActList.add(temp);
+                            System.out.println(temp.getActivityId());
                         }
+                        actList = new ArrayList<>(tempActList);
+                        System.out.println(actList);
                     }
                     else{
                         Log.i("Connection", "Fail");
@@ -123,6 +141,9 @@ public class PublicPage extends AppCompatActivity  {
             }
         }).start();
     }
+    /**
+     * 将输入流转换成字符串
+     */
     public String StreamToString(InputStream is) {
         //把输入流转换成字符串
         try {
@@ -140,6 +161,9 @@ public class PublicPage extends AppCompatActivity  {
             return null;
         }
     }
+    /**
+     * 返回系统时间
+     */
     private String getSystemDate(){
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -147,6 +171,9 @@ public class PublicPage extends AppCompatActivity  {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         return String.valueOf(year*10000+month*100+day);
     }
+    /**
+     * 设置自定义的系统时间控制数组
+     */
     private void setSystemDate(){
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -157,9 +184,43 @@ public class PublicPage extends AppCompatActivity  {
         date[2] = day;
 
     }
+    public void WriteToFile(String filename, String content){
+        try{
+            File file = new File(Environment.getExternalStorageDirectory(),filename);
+            if(!file.exists())
+                file.createNewFile();
+            FileOutputStream os = new FileOutputStream(file);
+            os.write(content.getBytes());
+            os.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    private String getUsername(){
+        String encoding = "UTF-8";
+        File file = new File("UseInformation.txt");
+        Long filelength = file.length();
+        byte[] filecontent = new byte[filelength.intValue()];
+        try {
+            FileInputStream in = new FileInputStream(file);
+            in.read(filecontent);
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            return new String(filecontent, encoding);
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("The OS does not support " + encoding);
+            e.printStackTrace();
+            return null;
+        }
+
+    }
     /**
      * 初始化日历栏
-     * @param a
      */
     private void initDateColumn(int a){
         LinearLayout dateCase = dateColumn;
@@ -238,11 +299,13 @@ public class PublicPage extends AppCompatActivity  {
             String circleButtonText = "";
             String barButtonText = "";
             i = 0;
+            System.out.println(actList);
             for (Activity ac : actList) {
                 String a = "";
                 String b = "";
                 //System.out.println(actList[0].getStartMinute());
                 //System.out.println(actList[0].getMainLabel());
+                //System.out.println(ac.getActivityId());
                 if (ac.getStartMinute() < 10) {
                     a = "0" + String.valueOf(ac.getStartMinute());
                 } else {
@@ -269,13 +332,13 @@ public class PublicPage extends AppCompatActivity  {
                 circleBtn.setLayoutParams(circleButtonParams);
                 barBtn.setLayoutParams(barButtonParams);
                 barBtn.setOnClickListener(activityDetailListener);
-                if (ac.getMainLabel().equals("科创")) {
+                if (ac.getMainLabel().equals("赛事")) {
                     setShapeColor(circleBtn, android.graphics.Color.rgb(218, 112, 214));
                     setShapeColor(barBtn, android.graphics.Color.rgb(218, 112, 214));
-                } else if (ac.getMainLabel().equals("计算机")) {
+                } else if (ac.getMainLabel().equals("志愿")) {
                     setShapeColor(circleBtn, android.graphics.Color.rgb(0, 191, 255));
                     setShapeColor(barBtn, android.graphics.Color.rgb(0, 191, 255));
-                } else if (ac.getMainLabel().equals("体育")) {
+                } else if (ac.getMainLabel().equals("讲座")) {
                     setShapeColor(circleBtn, android.graphics.Color.rgb(50, 205, 50));
                     setShapeColor(barBtn, android.graphics.Color.rgb(50, 205, 50));
                 } else if (ac.getMainLabel().equals("文学")) {
@@ -294,8 +357,6 @@ public class PublicPage extends AppCompatActivity  {
     }
     /**
      * 设置 shape 的颜色
-     * @param view
-     * @param solidColor
      */
     public static void setShapeColor(View view,int solidColor){
         if(view == null){
@@ -304,65 +365,9 @@ public class PublicPage extends AppCompatActivity  {
         GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
         gradientDrawable.setColor(solidColor);
     }
-    protected void GetActivityFromId(final int i){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    JSONObject Json = new JSONObject();  //把数据存成Json格式
-                    Json.put("ActivityID", i);
-                    String content = String.valueOf(Json);  //Json格式转成字符串来传输
-
-                    URL url = new URL("https://iknow.gycis.me/downloadData/getDetail");  //不同的请求发送到不同的URL地址，见群里的“后端网页名字设计.docx”
-                    HttpURLConnection connection =  (HttpURLConnection)url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setConnectTimeout(5000);
-                    connection.setReadTimeout(5000);
-                    connection.setDoInput(true);
-                    connection.setDoOutput(true);
-
-                    Log.i("Connection", content);
-                    OutputStream os = connection.getOutputStream();  //打开输出流传输数据
-                    os.write(content.getBytes());
-                    os.flush();
-                    os.close();
-                    Log.i("Connection", String.valueOf(connection.getResponseCode()));  //如果ResponseCode=200说明和服务器
-                    if (connection.getResponseCode() == 200) {
-                        //以字符串格式读取服务器的返回内容，Register功能只需返回普通字符串，如果请求的是活动信息则将会返回Json格式的字符串，
-                        //可以用形如JSONObject Json = new JSONObject(String)的语句把字符串转成Json格式
-                        String result = StreamToString(connection.getInputStream());
-                        JSONObject thisJson = new JSONObject(result);
-                        Log.i("Connection", result);
-                        temp.setActivityId(thisJson.getInt("Id"));
-                        temp.setStartHour(thisJson.getInt("Start_hour"));
-                        temp.setStartMinute(thisJson.getInt("Start_minute"));
-                        temp.setEndHour(thisJson.getInt("End_hour"));
-                        temp.setEndMinute(thisJson.getInt("End_minute"));
-                        temp.setDay(thisJson.getInt("Day"));
-                        temp.setMonth(thisJson.getInt("Month"));
-                        temp.setYear(thisJson.getInt("Year"));
-                        temp.setName(thisJson.getString("Name"));
-                        temp.setPlace(thisJson.getString("Address"));
-                        temp.setHost(thisJson.getString("Holder"));
-                        temp.setMainLabel(thisJson.getString("Tag1"));
-                        temp.setSubLabel(thisJson.getString("Tag2"));
-                        temp.setActivityLabel(thisJson.getString("Tag3"));
-                        temp.setIntroduction(thisJson.getString("Introduction"));
-                        temp.setUrl(thisJson.getString("Url"));
-                    }
-
-                    else{
-                        Log.i("Connection", "Fail");
-                    }
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
 
     Button.OnClickListener pageChangeListener = new Button.OnClickListener() {
-        public void onClick(View v) {
+        public void onClick(View v) { //转换到搜索页面的监听
             Intent intent = new Intent(PublicPage.this, SearchPage.class);
             startActivity(intent);
             PublicPage.this.finish();
@@ -370,39 +375,41 @@ public class PublicPage extends AppCompatActivity  {
     };
 
     Button.OnClickListener dateChangeListener = new Button.OnClickListener() {
-        public void onClick(View v){
+        public void onClick(View v){ //日期栏变动的监听
             int n = v.getId();
             publicActivity.removeAllViews();
-            GetActivity(String.valueOf(Integer.parseInt(getSystemDate())+n));
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, n);
+            System.out.println(cal);
+            String targetDay = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
+            System.out.println(targetDay);
+            GetActivity(targetDay);
             initPublicActivity();
             dateColumn.removeAllViews();
             initDateColumn(n);
         }
     };
     Button.OnClickListener activityDetailListener = new Button.OnClickListener(){
-        public void onClick(View v){
+        public void onClick(View v){  //事件详情页面监听
             int n = v.getId();
             int no = actList.get(n-500).getActivityId();
-            GetActivityFromId(actList.get(n-500).getActivityId());
+            //GetActivityFromId(actList.get(n-500).getActivityId());
             Intent intent = new Intent(PublicPage.this, ResultDetailPage.class);
             intent.putExtra("ActivityNum",no);
             startActivityForResult(intent,REQUESTCODE);
-            PublicPage.this.finish();
         }
     };
     Button.OnClickListener switchButtonListener = new Button.OnClickListener() {
-        public void onClick(View v) {
+        public void onClick(View v) { //页面转换栏监听
             if(v.getId()==R.id.PrivateButton) {
                 Intent intent = new Intent(PublicPage.this, PrivatePage.class);
                 startActivity(intent);
                 PublicPage.this.finish();
-                //现在是跳转到public，之后合并再说
             }
             else if(v.getId()==R.id.SettingButton){
-                Intent intent = new Intent(PublicPage.this, SettingPage.class);
+                Intent intent = new Intent(PublicPage.this, SearchPage.class);
                 startActivity(intent);
                 PublicPage.this.finish();
-                //现在是跳转到public，之后合并再说
             }
         }
     };
