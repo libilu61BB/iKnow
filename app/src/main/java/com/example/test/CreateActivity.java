@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
@@ -91,6 +93,8 @@ public class CreateActivity extends AppCompatActivity {
         public void setDate(int yearset,int monthset,int dayset){year=yearset;month=monthset;day=dayset;}
     }  //Event类的定义
     Event event=new Event();
+
+    private String[] items = {"请选择您的院系:","建筑学院","经济管理学院","土木水利学院","公共管理学院","环境学院","马克思主义学院","人文学院","机械工程学院","社会科学学院","信息科学技术学院","法学院","新闻与传播学院","五道口金融学院","材料学院","美术学院","工程物理系","化学工程系","核能与新能源技术研究院","理学院","体育部","艺术教育中心","生命科学学院","医学院","药学院","交叉信息研究院","苏世明书院","新雅书院"};
     private List<String> DepartmentChoice(){
         List<String> data = new ArrayList<>();
         data.add("请选择您的院系:");
@@ -107,7 +111,7 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_activity);
         DepartmentSpinner = findViewById(R.id.Department);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, DepartmentChoice());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         DepartmentSpinner.setAdapter(adapter);
         publishBtn=(Button) findViewById(R.id.submitAll);
@@ -278,19 +282,13 @@ public class CreateActivity extends AppCompatActivity {
                     event.url=url;
                 }
                 //检查所属单位
+                DepartmentSpinner.setOnItemSelectedListener(new MySelectedListener());
                 final String department1 = DepartmentSpinner.getSelectedItem().toString();
-                if(department1.equals("请选择您的院系:")){
-                    TextView Message1;
-                    Message1 = (TextView) findViewById(R.id.collegeerror);
-                    Message1.setVisibility(View.VISIBLE);
-                    flag[8]=false;
-                }
-                else{
-                    event.department=department1;
-                }
+                event.department=department1;
+
 
                 //检查标签是否选择
-                if(label1=="-"||label2=="-"|| label3=="-" ){
+                if(label1.equals("-")){
                     TextView Message1;
                     Message1 = (TextView) findViewById(R.id.choosen);
                     Message1.setText("请选择标签");
@@ -298,6 +296,7 @@ public class CreateActivity extends AppCompatActivity {
                     flag[9]=false;
                 }
                 else{
+                    flag[9]=true;
                     event.MainLabel=label1;
                     event.SecondLabel=label2;
                     event.ThemeLabel=label3;
@@ -305,11 +304,18 @@ public class CreateActivity extends AppCompatActivity {
 
                 //检查所有标签是否都正确
                 for(int i=0;i<12;i++){
-                    if(flag[i]==false){
+                    if(flag[i]){
+                        UpdateFlag=true;
+                    }
+                    else{
                         UpdateFlag=false;
+                        break;
                     }
                 }
                 if(UpdateFlag==true){
+                    TextView Message;
+                    Message = (TextView) findViewById(R.id.setEventSuccessful);
+                    Message.setVisibility(View.INVISIBLE);
                     sendActivity Pulish = new sendActivity();
                     Pulish.start();
                     try {
@@ -317,14 +323,26 @@ public class CreateActivity extends AppCompatActivity {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                    if(PublishSucceedFlag){
+                        TextView Message1;
+                        Message1 = (TextView) findViewById(R.id.setEventSuccessful);
+                        Message1.setText("发布消息成功！");
+                        Message1.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        TextView Message1;
+                        Message1 = (TextView) findViewById(R.id.setEventSuccessful);
+                        Message1.setText("网络连接失败！");
+                        Message1.setVisibility(View.VISIBLE);
+                    }
                 }
                 else {
                     TextView Message1;
                     Message1 = (TextView) findViewById(R.id.setEventSuccessful);
-                    Message1.setText("发布消息失败！");
+                    Message1.setText("信息填写错误！");
                     Message1.setVisibility(View.VISIBLE);
                 }
-                if(PublishSucceedFlag && UpdateFlag){
+                /*if(PublishSucceedFlag && UpdateFlag){
                     TextView Message1;
                     Message1 = (TextView) findViewById(R.id.setEventSuccessful);
                     Message1.setText("发布消息成功！");
@@ -341,7 +359,7 @@ public class CreateActivity extends AppCompatActivity {
                     Message1 = (TextView) findViewById(R.id.setEventSuccessful);
                     Message1.setText("网络连接失败！");
                     Message1.setVisibility(View.VISIBLE);
-                }
+                }*/
             }
         });
         labelSetting.setOnClickListener(new View.OnClickListener() {
@@ -558,7 +576,26 @@ public class CreateActivity extends AppCompatActivity {
             flag[7]=false;
         }
     }
+    private class MySelectedListener implements OnItemSelectedListener{
+        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,long arg3){
+            if(arg2==0){
+                flag[10]=false;
+                TextView Message1;
+                Message1 = (TextView)findViewById(R.id.collegeerror);
+                Message1.setVisibility(View.VISIBLE);
+            }
+            else{
+                flag[10]=true;
+                TextView Message1;
+                Message1 = (TextView)findViewById(R.id.collegeerror);
+                Message1.setVisibility(View.INVISIBLE);
+                event.department=items[arg2];
+            }
+        }
+        public void onNothingSelected(AdapterView<?> arg0){
 
+        }
+    }
     public class sendActivity extends Thread{
         public void run(){
             try{
@@ -603,7 +640,7 @@ public class CreateActivity extends AppCompatActivity {
                     //可以用形如JSONObject Json = new JSONObject(String)的语句把字符串转成Json格式
                     String result = StreamToString(connection.getInputStream());
                     Log.i("Connection", result);
-                    if(result.equals("Add succeed"))
+                    if(result.equals("activity add succeed"))
                         PublishSucceedFlag = true;
                     else if(result.equals("Add fail"))
                         PublishSucceedFlag = false;

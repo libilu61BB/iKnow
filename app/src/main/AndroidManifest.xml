@@ -44,7 +44,8 @@
         <activity android:name=".SetLabelForUser" />
         <activity android:name=".ContactUs" />
         <activity android:name=".OurInfo" />
-        <activity android:name=".ResultDetailPage"></activity>
+        <activity android:name=".ResultDetailPage" />
+        <activity android:name=".testUserLabel"></activity>
     </application>
 
 </manifest>

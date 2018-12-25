@@ -3,6 +3,7 @@ package com.example.test;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultDetailPage extends AppCompatActivity {
+    String username;
     TextView[] mTextview=new TextView[9];
     LinearLayout detailbtnList;
     Button backButton,lastButton;
@@ -51,12 +55,22 @@ public class ResultDetailPage extends AppCompatActivity {
             }
         });
         lastButton.setOnClickListener(addBtnListener);
+        getUsername();
         GetActivityFromId(resId);
         setActivity();
     }
     /**
      * 从主页面接收事件id发送给后端，后端发送事件
      */
+
+    public void getUsername(){
+        try{
+            JSONObject ThisUser = new JSONObject(GetData("UserInformation.txt"));
+            username = ThisUser.getString("Username");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     protected void GetActivityFromId(final int i){
         new Thread(new Runnable() {
             @Override
@@ -64,7 +78,7 @@ public class ResultDetailPage extends AppCompatActivity {
                 try{
                     JSONObject Json = new JSONObject();  //把数据存成Json格式
                     Json.put("ActivityID", i);
-                    Json.put("Username","q");
+                    Json.put("Username",username);
                     String content = String.valueOf(Json);  //Json格式转成字符串来传输
 
                     URL url = new URL("https://iknow.gycis.me/downloadData/getDetail");  //不同的请求发送到不同的URL地址，见群里的“后端网页名字设计.docx”
@@ -230,6 +244,26 @@ public class ResultDetailPage extends AppCompatActivity {
         }
 
 
+    }
+
+    private String GetData(String FileName){
+        try {
+            File file = new File(Environment.getExternalStorageDirectory(),FileName);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] b = new byte[1024];
+            int len = 0;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            while ((len = fis.read(b)) != -1) {
+                baos.write(b, 0, len);
+            }
+            String data = baos.toString();
+            baos.close();
+            fis.close();
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     /**
      * 添加的时间写入本地数据库
