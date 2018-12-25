@@ -45,9 +45,7 @@ public class PublicPage extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //WriteToFile("UseInformation.txt","q");
-        //username = getUsername();
-        username = "q";
+        username = "李碧璐";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_public_page);
         browser = findViewById(R.id.BrowserButton);
@@ -107,7 +105,6 @@ public class PublicPage extends AppCompatActivity  {
                         JSONObject[] ac = new JSONObject[acNum];
                         actList.clear();
                         List<Activity> tempActList = new ArrayList<Activity>();
-                        System.out.println(actList);
                         for(int i = 0; i < acNum; i++){
                             ac[i] = new JSONObject(acList.getString("Activity"+String.valueOf(i+1)));
                             Activity temp = new Activity();
@@ -128,10 +125,8 @@ public class PublicPage extends AppCompatActivity  {
                             temp.setIntroduction(ac[i].getString("Introduction"));
                             temp.setUrl(ac[i].getString("Url"));
                             tempActList.add(temp);
-                            System.out.println(temp.getActivityId());
                         }
                         actList = new ArrayList<>(tempActList);
-                        System.out.println(actList);
                     }
                     else{
                         Log.i("Connection", "Fail");
@@ -253,12 +248,9 @@ public class PublicPage extends AppCompatActivity  {
         }
         //System.out.println(actList[0].getStartMinute());
         if (actList == null){
-            System.out.println("没东西");
             publicActivity.addView(null);
         }
         else {
-            int num = actList.size();//当天事件数目
-            System.out.println(num);
             LinearLayout activityList = publicActivity;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); // 每行的水平LinearLayout
             layoutParams.setMargins(0, 0, 0, 0);
@@ -269,9 +261,6 @@ public class PublicPage extends AppCompatActivity  {
             for (Activity ac : actList) {
                 String a = "";
                 String b = "";
-                //System.out.println(actList[0].getStartMinute());
-                //System.out.println(actList[0].getMainLabel());
-                //System.out.println(ac.getActivityId());
                 if (ac.getStartMinute() < 10) {
                     a = "0" + String.valueOf(ac.getStartMinute());
                 } else {
@@ -357,9 +346,7 @@ public class PublicPage extends AppCompatActivity  {
             publicActivity.removeAllViews();
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, n);
-            System.out.println(cal);
             String targetDay = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
-            System.out.println(targetDay);
             GetActivity(targetDay);
             initPublicActivity();
             dateColumn.removeAllViews();
@@ -370,7 +357,6 @@ public class PublicPage extends AppCompatActivity  {
         public void onClick(View v){  //事件详情页面监听
             int n = v.getId();
             int no = actList.get(n-500).getActivityId();
-            //GetActivityFromId(actList.get(n-500).getActivityId());
             Intent intent = new Intent(PublicPage.this, ResultDetailPage.class);
             intent.putExtra("ActivityNum",no);
             startActivityForResult(intent,REQUESTCODE);
