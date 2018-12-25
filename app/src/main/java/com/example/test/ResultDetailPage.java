@@ -191,7 +191,7 @@ public class ResultDetailPage extends AppCompatActivity {
         }catch(InterruptedException e){
             e.printStackTrace();
         }
-        mTextview[0].setText(temp.getName());
+        mTextview[0].setText("事件详情");
         mTextview[1].setText(temp.getName());
         mTextview[2].setText(temp.getYear()+"年"+temp.getMonth()+"月"+temp.getDay()+"日");
         if(temp.getStartMinute()<10) {

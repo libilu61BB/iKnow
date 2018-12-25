@@ -2,6 +2,7 @@ package com.example.test;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -184,41 +185,6 @@ public class PublicPage extends AppCompatActivity  {
         date[2] = day;
 
     }
-    public void WriteToFile(String filename, String content){
-        try{
-            File file = new File(Environment.getExternalStorageDirectory(),filename);
-            if(!file.exists())
-                file.createNewFile();
-            FileOutputStream os = new FileOutputStream(file);
-            os.write(content.getBytes());
-            os.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-    private String getUsername(){
-        String encoding = "UTF-8";
-        File file = new File("UseInformation.txt");
-        Long filelength = file.length();
-        byte[] filecontent = new byte[filelength.intValue()];
-        try {
-            FileInputStream in = new FileInputStream(file);
-            in.read(filecontent);
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            return new String(filecontent, encoding);
-        } catch (UnsupportedEncodingException e) {
-            System.err.println("The OS does not support " + encoding);
-            e.printStackTrace();
-            return null;
-        }
-
-    }
     /**
      * 初始化日历栏
      */
@@ -317,7 +283,7 @@ public class PublicPage extends AppCompatActivity  {
                     b = String.valueOf(ac.getEndMinute());
                 }
                 circleButtonText = String.valueOf(ac.getStartHour()) + ":" + a + "\n————\n" + String.valueOf(ac.getEndHour()) + ":" + b;
-                barButtonText = ac.getName() + "\n\n" + ac.getHost() + "\t\t" + ac.getPlace();
+                barButtonText = ac.getName() + "\n\n" + ac.getPlace();
                 LinearLayout.LayoutParams circleButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 circleButtonParams.setMargins(0, 0, 0, 0);
                 circleButtonParams.weight = 5;
@@ -332,18 +298,53 @@ public class PublicPage extends AppCompatActivity  {
                 circleBtn.setLayoutParams(circleButtonParams);
                 barBtn.setLayoutParams(barButtonParams);
                 barBtn.setOnClickListener(activityDetailListener);
-                if (ac.getMainLabel().equals("赛事")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(218, 112, 214));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(218, 112, 214));
-                } else if (ac.getMainLabel().equals("志愿")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(0, 191, 255));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(0, 191, 255));
-                } else if (ac.getMainLabel().equals("讲座")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(50, 205, 50));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(50, 205, 50));
-                } else if (ac.getMainLabel().equals("文学")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(240, 230, 140));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(240, 230, 140));
+                if(ac.getMainLabel().equals("科创")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(191,191,191),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("计算机")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,223,127),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("实践")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,181,181),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("外语")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(229,229,255),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("经济")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,255,204),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("文学")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(183,151,207),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("创业")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(127,215,247),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("电影")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(226,172,136),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("体育")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(200,231,167),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("志愿")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,128,128),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("艺术")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(150,186,218),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("讲座")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(215,255,151),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("学生节")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,153,204),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("演出")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(128,250,255),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("赛事")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,237,220),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("展览")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,181,181),PorterDuff.Mode.ADD);
                 }
                 LinearLayout activityCase = new LinearLayout(this);
                 activityCase.setOrientation(LinearLayout.HORIZONTAL);
