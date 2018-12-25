@@ -1,13 +1,11 @@
 package com.example.test;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,9 +23,11 @@ public class ResultDetailPage extends AppCompatActivity {
     LinearLayout detailbtnList;
     Button backButton,lastButton;
     String addState;
+    String username;
     Activity temp = new Activity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        username = "李碧璐";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_page);
         mTextview[0]=findViewById(R.id.activityname);
@@ -64,7 +64,7 @@ public class ResultDetailPage extends AppCompatActivity {
                 try{
                     JSONObject Json = new JSONObject();  //把数据存成Json格式
                     Json.put("ActivityID", i);
-                    Json.put("Username","q");
+                    Json.put("Username",username);
                     String content = String.valueOf(Json);  //Json格式转成字符串来传输
 
                     URL url = new URL("https://iknow.gycis.me/downloadData/getDetail");  //不同的请求发送到不同的URL地址，见群里的“后端网页名字设计.docx”
@@ -87,7 +87,6 @@ public class ResultDetailPage extends AppCompatActivity {
                         String result = StreamToString(connection.getInputStream());
                         JSONObject lastJson = new JSONObject(result);
                         addState = lastJson.getString("Private");
-                        System.out.println(addState);
                         if(addState.equals("False")){
                             lastButton.setVisibility(View.VISIBLE);
                         }
@@ -210,20 +209,16 @@ public class ResultDetailPage extends AppCompatActivity {
         mTextview[6].setText(temp.getHost());
         mTextview[7].setText(temp.getIntroduction());
         mTextview[8].setText(temp.getUrl());
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        int width = wm.getDefaultDisplay().getWidth();
         LinearLayout ButtonList = detailbtnList;
-        LinearLayout.LayoutParams detailButtonParams = new LinearLayout.LayoutParams(width/3, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams detailButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
         List<String> TagString = new ArrayList<String>();
         if(temp.getMainLabel()!="null"){TagString.add(temp.getMainLabel());}
         if(temp.getSubLabel()!="null"){TagString.add(temp.getSubLabel());}
         if(temp.getActivityLabel()!="null"){
-            System.out.println(temp.getActivityLabel().length());
             TagString.add(temp.getActivityLabel());
         }
-        System.out.println(TagString);
         for (String s:TagString){
             Button childBtn = (Button) LayoutInflater.from(this).inflate(R.layout.history_button, null);
             childBtn.setText(s);
@@ -247,7 +242,6 @@ public class ResultDetailPage extends AppCompatActivity {
         public void onClick(View v){  //
             writeIntoMySql();
             PushActivityToServer(temp.getActivityId());
-            System.out.println("成功");
             ResultDetailPage.this.finish();
         }
     };

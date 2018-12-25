@@ -48,11 +48,9 @@ import java.util.concurrent.BlockingQueue;
 
 public class SearchPage extends AppCompatActivity {
 
-    private static String[] testHistory = {"科创","计算机","体育","实践","外语","经济","创业","文学","电影","志愿",
-            "艺术","讲座","学生节","展览","赛事","演出","全部标签","a","1","c"
-    };
     private static String[] labelNames = {"科创","计算机","体育","实践","外语","经济","创业","文学","电影","志愿",
             "艺术","讲座","学生节","展览","赛事","演出","全部标签"};
+    String[] historyName = new String[20];
     List<Activity> acResult = new ArrayList<Activity>();
     LinearLayout historyView, resultView, switchView, cover, resultList;
     SearchView browser;
@@ -90,11 +88,7 @@ public class SearchPage extends AppCompatActivity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }
-                //System.out.println("这是输出");
-                //System.out.println(testHistoryList);
                 CreateHistoryList();
-                System.out.println("这是输出");
-                System.out.println(testHistoryList);
                 GetSelectedActivity();
                 initSwitchView();
                 initResultView();
@@ -129,10 +123,8 @@ public class SearchPage extends AppCompatActivity {
         cover = findViewById(R.id.cover);
         try {
             File file = new File(Environment.getExternalStorageDirectory(), "History.txt");
-            System.out.println("文件已经建立");
             if (!file.exists()) {
                 file.createNewFile();
-                System.out.println("文件建立");
             }
         }catch(IOException e){}
         try{
@@ -143,13 +135,37 @@ public class SearchPage extends AppCompatActivity {
         initHistoryView();
     }
     public void renewHistoryList(String s) throws InterruptedException{
-        if(testHistoryList.size()<20) {
-            testHistoryList.put(s);
-            //System.out.println("我被执行了");
+        boolean Flag = false;
+        File file = new File(Environment.getExternalStorageDirectory(), "History.txt");
+        System.out.println("这个文件被执行了");
+        if(file.exists()){
+            System.out.println("这个文件被执行了");
+            try {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader br = new BufferedReader(fileReader);
+                String lineContent;
+                while((lineContent = br.readLine())!=null){
+                    if(s.equals(lineContent)){
+                        Flag = true;
+                    }
+                }
+                br.close();
+                fileReader.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("no this file");
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("io exception");
+                e.printStackTrace();
+            }
         }
-        else{
-            testHistoryList.take();
-            testHistoryList.put(s);
+        if(!Flag) {
+            if (testHistoryList.size() < 20) {
+                testHistoryList.put(s);
+            } else {
+                testHistoryList.poll();
+                testHistoryList.put(s);
+            }
         }
     }
     /**
@@ -157,7 +173,6 @@ public class SearchPage extends AppCompatActivity {
      */
     private void initHistoryView(){
         LinearLayout historyCase = historyView;
-        int size = testHistory.length;
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(10, 1, 10, 1);
         LinearLayout.LayoutParams historyBarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -175,15 +190,11 @@ public class SearchPage extends AppCompatActivity {
         searchHistory.setText("搜索历史");
         historyHintBar.addView(searchHistory);
         historyCase.addView(historyHintBar);
-
+        BlockingQueue<String> tempHistory= new ArrayBlockingQueue<String>(20);
+        tempHistory.addAll(testHistoryList);
         for(int i = 0; i < testHistoryList.size(); i++){
-            BlockingQueue<String> tempHistory;
-            String item = "";
-            try{
-                item = testHistoryList.take();
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
+            String item = tempHistory.poll();
+            historyName[i] = item;
             LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             int length= item.length();
 
@@ -726,9 +737,8 @@ public class SearchPage extends AppCompatActivity {
     }
 
     public void readHistoryList(BlockingQueue<String> m) throws InterruptedException{
-        File file = new File("History.txt");
+        File file = new File(Environment.getExternalStorageDirectory(), "History.txt");
         if(file.exists()){
-            System.out.println("这个文件被执行了");
             try {
                 FileReader fileReader = new FileReader(file);
                 BufferedReader br = new BufferedReader(fileReader);
@@ -739,10 +749,8 @@ public class SearchPage extends AppCompatActivity {
                 br.close();
                 fileReader.close();
             } catch (FileNotFoundException e) {
-                System.out.println("no this file");
                 e.printStackTrace();
             } catch (IOException e) {
-                System.out.println("io exception");
                 e.printStackTrace();
             }
         }
@@ -752,10 +760,12 @@ public class SearchPage extends AppCompatActivity {
         try{
             BlockingQueue<String> history = new ArrayBlockingQueue<String>(20);
             history.addAll(testHistoryList);
+            String b = "";
             for(int k = 0; k < testHistoryList.size();k++){
-                String a = history.take()+"\n";
-                WriteToFile("History.txt", a);
+                String a = history.poll()+"\n";
+                b += a ;
             }
+            WriteToFile("History.txt", b);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -791,7 +801,7 @@ public class SearchPage extends AppCompatActivity {
             historyView.removeAllViews();
             initSwitchView();
             initResultView();
-            search = testHistory[n-100];
+            search = historyName[n-100];
             GetSelectedActivity();
             try{
                 Thread.sleep(1500);
