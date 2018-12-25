@@ -68,6 +68,7 @@ public class SearchPage extends AppCompatActivity {
                 resultView.removeAllViews();
                 resultList.removeAllViews();
                 cover.removeAllViews();
+                cover.getBackground().setAlpha(0);
                 search = query;
                 GetSelectedActivity();
                 System.out.println(acResult);

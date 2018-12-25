@@ -413,7 +413,6 @@ public class PublicPage extends AppCompatActivity  {
 
     //获得用户名
     public void getUsername(){
-        String name;
         try{
             JSONObject ThisUser = new JSONObject(GetData("UserInformation.txt"));
             username = ThisUser.getString("Username");
