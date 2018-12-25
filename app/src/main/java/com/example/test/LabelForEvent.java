@@ -57,7 +57,7 @@ public class LabelForEvent extends AppCompatActivity {
     boolean[] activityLabel = new boolean[5];
     //计数所选主题标签数目，副标签数目，活动形式标签数目并初始化为0
     int mainCount = 0, subCount = 0, activityCount = 0;
-    private String MainLabel,SecondLabel,ThemeLabel;
+    private String MainLabel="-",SecondLabel="-",ThemeLabel="-";
     Boolean flag1=false,flag2=false,flag3=false,savelabelFlag=false;
     //定义数组存储各个按钮的id
     Integer[] ButtonId = new Integer[]{
@@ -298,7 +298,8 @@ public class LabelForEvent extends AppCompatActivity {
             }
         }
         Intent intent=new Intent(LabelForEvent.this,CreateActivity.class);
-        if(flag1==true & flag2==true & flag3==true){  //三类标签都选择成功,上传数据
+        //佳妮的传回数据
+        /*if(flag1==true & flag2==true & flag3==true){  //三类标签都选择成功,上传数据
             savelabelFlag=true;
             intent.putExtra("MainLabel",MainLabel);
             intent.putExtra("SecondLabel",SecondLabel);
@@ -309,6 +310,25 @@ public class LabelForEvent extends AppCompatActivity {
             LabelForEvent.this.setResult(RESULT_OK, intent);
             //关闭Activity
             //LabelForEvent.this.finish();
+        }*/
+
+        if(flag1==true){  //主标签都选择成功,上传数据
+            savelabelFlag=true;
+            intent.putExtra("MainLabel",MainLabel);
+            intent.putExtra("SecondLabel",SecondLabel);
+            intent.putExtra("ThemeLabel",ThemeLabel);
+            TextView Message;
+            Message = (TextView) findViewById(R.id.TextSetEventLabelSuccessful);
+            Message.setVisibility(View.VISIBLE);
+            LabelForEvent.this.setResult(RESULT_OK, intent);
+            //关闭Activity
+            //LabelForEvent.this.finish();
+        }
+        else{
+            TextView Message;
+            Message = (TextView) findViewById(R.id.TextSetEventLabelSuccessful);
+            Message.setText("请选择主题标签！");
+            Message.setVisibility(View.VISIBLE);
         }
 //        else{
 //            intent.putExtra("MainLabel","NULL");

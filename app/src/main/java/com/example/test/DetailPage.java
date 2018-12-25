@@ -184,6 +184,8 @@ public class DetailPage extends AppCompatActivity {
             tag2.setText(cursor.getString(cursor.getColumnIndex("subLabel")));
             tag3.setText(cursor.getString(cursor.getColumnIndex("activityLabel")));
         }
+
+
         if(!cursor.getString(cursor.getColumnIndex("url")).equals("null"))
             mTextview[7].setText(cursor.getString(cursor.getColumnIndex("url")));
         if(!cursor.getString(cursor.getColumnIndex("introduction")).equals("null"))

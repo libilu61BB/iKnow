@@ -51,7 +51,7 @@ public class RegisterPage extends AppCompatActivity {
         data.add("人文学院"); data.add("机械工程学院"); data.add("社会科学学院"); data.add("信息科学技术学院"); data.add("法学院");data.add("新闻与传播学院");
         data.add("五道口金融学院");data.add("材料学院"); data.add("美术学院");data.add("工程物理系"); data.add("化学工程系");data.add("核能与新能源技术研究院");
         data.add("理学院"); data.add("体育部");data.add("艺术教育中心");data.add("生命科学学院");data.add("医学院");data.add("药学院");data.add("交叉信息研究院");
-        data.add("苏世民学院");data.add("新雅书院");
+        data.add("苏世民学院");data.add("新雅书院");data.add("其他");
         return data;
     }
 
