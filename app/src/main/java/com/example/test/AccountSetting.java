@@ -31,7 +31,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class AccountSetting extends AppCompatActivity {
-
     public ImageButton backBtn,changeCollegeBtn;
     public Button changePasswordBtn;
     private EditText passwordText1, passwordText2, passwordText3;
@@ -40,7 +39,7 @@ public class AccountSetting extends AppCompatActivity {
     public String oldpassword,newpassword,confirmpassword;
     public Boolean Flag1=true;
     public Boolean changeFlag=true,changeDepartmentFlag=false;
-    public String name,college="NULL";
+    public String name="q",college="NULL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +140,7 @@ public class AccountSetting extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                AccountSetting.this.finish();
             };
         });
 
