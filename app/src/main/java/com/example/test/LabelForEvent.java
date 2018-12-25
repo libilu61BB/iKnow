@@ -319,6 +319,7 @@ public class LabelForEvent extends AppCompatActivity {
             intent.putExtra("ThemeLabel",ThemeLabel);
             TextView Message;
             Message = (TextView) findViewById(R.id.TextSetEventLabelSuccessful);
+            Message.setText("标签设置成功！");
             Message.setVisibility(View.VISIBLE);
             LabelForEvent.this.setResult(RESULT_OK, intent);
             //关闭Activity
