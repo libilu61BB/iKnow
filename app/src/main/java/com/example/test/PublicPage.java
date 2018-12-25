@@ -2,6 +2,7 @@ package com.example.test;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -319,7 +320,7 @@ public class PublicPage extends AppCompatActivity  {
                     b = String.valueOf(ac.getEndMinute());
                 }
                 circleButtonText = String.valueOf(ac.getStartHour()) + ":" + a + "\n————\n" + String.valueOf(ac.getEndHour()) + ":" + b;
-                barButtonText = ac.getName() + "\n\n" + ac.getHost() + "\t\t" + ac.getPlace();
+                barButtonText = ac.getName() + "\n\n" + ac.getPlace();
                 LinearLayout.LayoutParams circleButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 circleButtonParams.setMargins(0, 0, 0, 0);
                 circleButtonParams.weight = 5;
@@ -335,19 +336,39 @@ public class PublicPage extends AppCompatActivity  {
                 barBtn.setLayoutParams(barButtonParams);
                 barBtn.setOnClickListener(activityDetailListener);
                 //设置颜色
-                /*if (ac.getMainLabel().equals("赛事")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(218, 112, 214));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(218, 112, 214));
-                } else if (ac.getMainLabel().equals("志愿")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(0, 191, 255));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(0, 191, 255));
-                } else if (ac.getMainLabel().equals("讲座")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(50, 205, 50));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(50, 205, 50));
-                } else if (ac.getMainLabel().equals("文学")) {
-                    setShapeColor(circleBtn, android.graphics.Color.rgb(240, 230, 140));
-                    setShapeColor(barBtn, android.graphics.Color.rgb(240, 230, 140));
-                }*/
+                if(ac.getMainLabel().equals("科创")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(191,191,191),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("计算机")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,223,127),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("实践")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,181,181),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("外语")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(229,229,255),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("经济")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,255,204),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("文学")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(183,151,207),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("创业")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(127,215,247),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("电影")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(226,172,136),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("体育")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(200,231,167),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("志愿")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,128,128),PorterDuff.Mode.ADD);
+                }
+                else if(ac.getMainLabel().equals("艺术")) {
+                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(150,186,218),PorterDuff.Mode.ADD);
+                }
                 LinearLayout activityCase = new LinearLayout(this);
                 activityCase.setOrientation(LinearLayout.HORIZONTAL);
                 activityCase.setLayoutParams(layoutParams);

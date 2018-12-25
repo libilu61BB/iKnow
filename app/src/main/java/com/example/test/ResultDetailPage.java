@@ -210,10 +210,8 @@ public class ResultDetailPage extends AppCompatActivity {
         mTextview[6].setText(temp.getHost());
         mTextview[7].setText(temp.getIntroduction());
         mTextview[8].setText(temp.getUrl());
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        int width = wm.getDefaultDisplay().getWidth();
         LinearLayout ButtonList = detailbtnList;
-        LinearLayout.LayoutParams detailButtonParams = new LinearLayout.LayoutParams(width/3, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams detailButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
         List<String> TagString = new ArrayList<String>();

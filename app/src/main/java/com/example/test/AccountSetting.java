@@ -39,7 +39,7 @@ public class AccountSetting extends AppCompatActivity {
     public String oldpassword,newpassword,confirmpassword;
     public Boolean Flag1=true;
     public Boolean changeFlag=false,changeDepartmentFlag=false;
-    public String name="q",college="NULL";
+    public String name,college="NULL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,7 +268,7 @@ public class AccountSetting extends AppCompatActivity {
         public void run(){
             try {
                 JSONObject Json = new JSONObject();
-                Json.put("Username", "q");
+                Json.put("Username", name);
                 Json.put("NewDepartment", college);
 
                 String content = String.valueOf(Json);  //Json格式转成字符串来传输
