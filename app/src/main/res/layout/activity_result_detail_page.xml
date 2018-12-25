@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailPage">
+    tools:context="com.example.test.ResultDetailPage">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -41,9 +41,9 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="活动详情"
+                    android:text="事件详情"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -80,8 +80,8 @@
                     android:layout_width="match_parent"
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
-                    android:layout_height="48dp"
-                    />
+                    android:textSize="18sp"
+                    android:layout_height="48dp" />
 
 
             </RelativeLayout>
@@ -108,7 +108,8 @@
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
@@ -134,7 +135,8 @@
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
@@ -160,7 +162,8 @@
                     android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:paddingTop="12.5dp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
@@ -186,7 +189,8 @@
                     android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:paddingTop="12.5dp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
@@ -212,39 +216,17 @@
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
             <LinearLayout
+                android:id = "@+id/detailbtnList"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
                 android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/tag1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="0.1" />
-
-                <Button
-                    android:id="@+id/tag2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="0.1" />
-
-                <Button
-                    android:id="@+id/tag3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="0.1" />
 
             </LinearLayout>
 
@@ -260,9 +242,10 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/tv8"
+                android:id="@+id/tv7"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="200dp"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/textView14"
@@ -275,10 +258,12 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/tv7"
+                android:id="@+id/tv8"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:autoLink="web" />
+                android:paddingTop="12.5dp"
+                android:autoLink="web"
+                android:textSize="18sp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -291,12 +276,13 @@
                     android:layout_marginBottom="10dp"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/circle_button_shape"
-                    android:text="从我的日程中删除此活动"
+                    android:visibility="invisible"
+                    android:text="将此活动加入我的日历"
+                    android:textSize="18sp"
                     android:textColor="@android:color/background_light" />
 
             </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>
-
 </android.support.constraint.ConstraintLayout>

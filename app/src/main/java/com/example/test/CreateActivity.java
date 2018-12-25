@@ -94,11 +94,9 @@ public class CreateActivity extends AppCompatActivity {
     private List<String> DepartmentChoice(){
         List<String> data = new ArrayList<>();
         data.add("请选择您的院系:");
-        data.add("建筑学院"); data.add("经济管理学院"); data.add("土木水利学院"); data.add("公共管理学院"); data.add("环境学院");data.add("马克思主义学院");
-        data.add("人文学院"); data.add("机械工程学院"); data.add("社会科学学院"); data.add("信息科学技术学院"); data.add("法学院");data.add("新闻与传播学院");
-        data.add("五道口金融学院");data.add("材料学院"); data.add("美术学院");data.add("工程物理系"); data.add("化学工程系");data.add("核能与新能源技术研究院");
-        data.add("理学院"); data.add("体育部");data.add("艺术教育中心");data.add("生命科学学院");data.add("医学院");data.add("药学院");data.add("交叉信息研究院");
-        data.add("苏世民学院");data.add("新雅书院");
+        data.add("建筑学院"); data.add("经济管理学院"); data.add("土木水利学院"); data.add("公共管理学院"); data.add("环境学院");
+        data.add("人文学院"); data.add("机械工程学院"); data.add("社会科学学院"); data.add("信息科学技术学院"); data.add("法学院");
+        data.add("新闻与传播学院"); data.add("材料学院"); data.add("美术学院"); data.add("理学院"); data.add("生命科学学院"); data.add("医学院");
         return data;
     }
 
@@ -310,20 +308,7 @@ public class CreateActivity extends AppCompatActivity {
                     }
                 }
                 if(UpdateFlag==true){
-                    Publish publishActivity = new Publish();
-                    publishActivity.start();
-                    try {
-                        publishActivity.join();
-                    }catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-
-                if(PublishSucceedFlag){
-                    TextView successInfo;
-                    successInfo = (TextView)findViewById(R.id.setEventSuccessful);
-                    successInfo.setVisibility(View.VISIBLE);
+                    Publish();
                 }
             }
         });
@@ -541,15 +526,16 @@ public class CreateActivity extends AppCompatActivity {
             flag[7]=false;
         }
     }
-
-    public class Publish extends Thread{
+    public void Publish(){
+        new Thread(new Runnable() {
+            @Override
             public void run() {
                 try{
                     JSONObject Json=new JSONObject();
                     //Json.put("Username",Username);
                     Json.put("Name",event.eventName);
                     Json.put("Year",event.year);
-                    Json.put("Month",event.month+1);
+                    Json.put("Month",event.month);
                     Json.put("Day",event.day);
                     Json.put("StartHour",event.starthour);
                     Json.put("StartMin",event.startmin);
@@ -586,7 +572,7 @@ public class CreateActivity extends AppCompatActivity {
                         //可以用形如JSONObject Json = new JSONObject(String)的语句把字符串转成Json格式
                         String result = StreamToString(connection.getInputStream());
                         Log.i("Connection", result);
-                        if(result.equals("activity add succeed"))
+                        if(result.equals("Add succeed"))
                             PublishSucceedFlag = true;
                         else if(result.equals("Add fail"))
                             PublishSucceedFlag = false;
@@ -598,8 +584,8 @@ public class CreateActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }
-
+        }).start();
+    }
     public String StreamToString(InputStream is) {
         //把输入流转换成字符串
         try {

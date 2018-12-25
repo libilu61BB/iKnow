@@ -16,8 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class DetailPage extends AppCompatActivity {
-    TextView[] mTextview=new TextView[8];
-    Button backButton,lastButton,tag1,tag2;
+    TextView[] mTextview=new TextView[9];
+    Button backButton,lastButton,tag1,tag2,tag3;
     private MySql mysql;
     private Cursor cursor;
     private int Id;
@@ -49,14 +49,15 @@ public class DetailPage extends AppCompatActivity {
         mTextview[5]=findViewById(R.id.tv5);
         mTextview[6]=findViewById(R.id.tv6);
         mTextview[7]=findViewById(R.id.tv7);
+        mTextview[8]=findViewById(R.id.tv8);
         backButton=findViewById(R.id.back_button);
         lastButton=findViewById(R.id.last_button);
         tag1=findViewById(R.id.tag1);
         tag2=findViewById(R.id.tag2);
+        tag3=findViewById(R.id.tag3);
         backButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Intent intent = new Intent(DetailPage.this, PrivatePage.class);
-                startActivity(intent);
+                goBack();
             }
         });
         lastButton.setOnClickListener(new View.OnClickListener(){
@@ -151,21 +152,45 @@ public class DetailPage extends AppCompatActivity {
     }
 
     private void setActivity(){
-        mTextview[0].setText(cursor.getString(cursor.getColumnIndex("name")));
         mTextview[1].setText(cursor.getString(cursor.getColumnIndex("name")));
         mTextview[2].setText(cursor.getString(cursor.getColumnIndex("year"))+"年"+
-                cursor.getString(cursor.getColumnIndex("year"))+"月"+
-                cursor.getString(cursor.getColumnIndex("year"))+"日");
-        mTextview[3].setText(cursor.getString(cursor.getColumnIndex("startHour"))+":"+cursor.getString(cursor.getColumnIndex("startMinute")));
-        mTextview[4].setText(cursor.getString(cursor.getColumnIndex("endHour"))+":"+cursor.getString(cursor.getColumnIndex("endMinute")));
+                cursor.getString(cursor.getColumnIndex("month"))+"月"+
+                cursor.getString(cursor.getColumnIndex("day"))+"日");
+        if(Integer.valueOf(cursor.getString(cursor.getColumnIndex("startMinute"))) < 10)
+            mTextview[3].setText(cursor.getString(cursor.getColumnIndex("startHour"))+":0"+cursor.getString(cursor.getColumnIndex("startMinute")));
+        else
+            mTextview[3].setText(cursor.getString(cursor.getColumnIndex("startHour"))+":"+cursor.getString(cursor.getColumnIndex("startMinute")));
+        if(Integer.valueOf(cursor.getString(cursor.getColumnIndex("endMinute"))) < 10)
+            mTextview[4].setText(cursor.getString(cursor.getColumnIndex("endHour"))+":0"+cursor.getString(cursor.getColumnIndex("endMinute")));
+        else
+            mTextview[4].setText(cursor.getString(cursor.getColumnIndex("endHour"))+":"+cursor.getString(cursor.getColumnIndex("endMinute")));
         mTextview[5].setText(cursor.getString(cursor.getColumnIndex("place")));
         mTextview[6].setText(cursor.getString(cursor.getColumnIndex("host")));
         tag1.setText(cursor.getString(cursor.getColumnIndex("mainLabel")));
-        tag2.setText(cursor.getString(cursor.getColumnIndex("subLabel")));
-        mTextview[7].setText(cursor.getString(cursor.getColumnIndex("url")));
+
+        if(cursor.getString(cursor.getColumnIndex("subLabel")).equals("null") && cursor.getString(cursor.getColumnIndex("activityLabel")).equals("null")){
+            tag2.setVisibility(View.INVISIBLE);
+            tag3.setVisibility(View.INVISIBLE);
+        }
+        else if(cursor.getString(cursor.getColumnIndex("subLabel")).equals("null")){
+            tag2.setText(cursor.getString(cursor.getColumnIndex("activityLabel")));
+            tag3.setVisibility(View.INVISIBLE);
+        }
+        else if(cursor.getString(cursor.getColumnIndex("activityLabel")).equals("null")){
+            tag2.setText(cursor.getString(cursor.getColumnIndex("subLabel")));
+            tag3.setVisibility(View.INVISIBLE);
+        }
+        else{
+            tag2.setText(cursor.getString(cursor.getColumnIndex("subLabel")));
+            tag3.setText(cursor.getString(cursor.getColumnIndex("activityLabel")));
+        }
+        if(!cursor.getString(cursor.getColumnIndex("url")).equals("null"))
+            mTextview[7].setText(cursor.getString(cursor.getColumnIndex("url")));
+        if(!cursor.getString(cursor.getColumnIndex("introduction")).equals("null"))
+            mTextview[8].setText(cursor.getString(cursor.getColumnIndex("introduction")));
     }
 
-    private void goBack(View view) {
+    private void goBack() {
         DetailPage.this.finish();
     }
 }

@@ -26,35 +26,44 @@
             app:layout_constraintVertical_bias="1.0"
             tools:layout_editor_absoluteX="8dp">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
 
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                <LinearLayout
+                    android:layout_width="93dp"
+                    android:layout_height="60dp"
                     android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/backtoSetting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="80dp"
+                        android:layout_height="60dp"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         app:srcCompat="@drawable/back" />
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="账户设置"
-                        android:textColor="@android:color/black"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                </LinearLayout>
 
-                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="账户设置"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/imageView5"
@@ -72,24 +81,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:orientation="horizontal">
-
-                <FrameLayout
-                    android:layout_width="255dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <ImageButton
-                        android:id="@+id/imageButton2"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="false"
-                        android:padding="10dp"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@drawable/github_pic" />
-                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -111,25 +102,24 @@
 
                         <TextView
                             android:id="@+id/textView11"
-                            android:layout_width="70dp"
-                            android:layout_height="52dp"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
 
-                            android:gravity="left"
+                            android:gravity="center"
 
                             android:text="用户名"
                             android:textSize="20dp"
                             android:textStyle="bold" />
 
-                        <EditText
-                            android:id="@+id/editName"
-                            android:layout_width="130dp"
+                        <TextView
+                            android:id="@+id/nameshow"
+                            android:layout_width="225dp"
                             android:layout_height="50dp"
-                            android:background="@null"
-                            android:ems="10"
-                            android:enabled="false"
-                            android:inputType="textPersonName"
-                            android:text="Name" />
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="TextView"
+                            android:textSize="24sp" />
 
                         <LinearLayout
                             android:layout_width="50dp"
@@ -150,28 +140,39 @@
 
                         <TextView
                             android:id="@+id/textView12"
-                            android:layout_width="70dp"
+                            android:layout_width="100dp"
                             android:layout_height="50dp"
                             android:layout_weight="1"
 
-                            android:gravity="top|left"
-
+                            android:gravity="center"
                             android:text="院    系"
                             android:textSize="20dp"
                             android:textStyle="bold" />
 
-                        <EditText
-                            android:id="@+id/editCollege"
-                            android:layout_width="130dp"
-                            android:layout_height="50dp"
-                            android:background="@null"
-                            android:ems="10"
-                            android:enabled="false"
-                            android:inputType="textPersonName"
-                            android:text="College" />
-                        <!--android:focusable="false"
-                        android:focusableInTouchMode="false"-->
+                        <LinearLayout
+                            android:layout_width="225dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
+                            <TextView
+                                android:id="@+id/Departmentshow"
+                                android:layout_width="225dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:text="TextView"
+                                android:textSize="24sp" />
+
+                            <TextView
+                                android:id="@+id/changeCol"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="*修改院系成功！"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:visibility="invisible"/>
+                        </LinearLayout>
 
                         <ImageButton
                             android:id="@+id/changeCollege"
@@ -206,12 +207,12 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="20dp"
                 android:orientation="vertical"></LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="310dp"
+                android:layout_height="400dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -220,7 +221,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="10dp"
+                        android:layout_width="20dp"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
@@ -405,18 +406,33 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:orientation="vertical"></LinearLayout>
+                    android:layout_height="50dp"
+                    android:orientation="vertical">
 
-                <RelativeLayout
+                    <TextView
+                        android:id="@+id/after"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:text="修改密码成功！"
+                        android:textSize="20dp"
+                        android:visibility="invisible" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal">
 
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="200dp"
-                        android:layout_centerHorizontal="true"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
@@ -424,7 +440,7 @@
                             android:id="@+id/changePassword"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.5"
                             android:background="@drawable/circle_button_shape"
                             android:gravity="center"
                             android:text="修改密码"
@@ -432,7 +448,7 @@
                             android:textSize="18sp" />
                     </LinearLayout>
 
-                </RelativeLayout>
+                </LinearLayout>
 
             </LinearLayout>
 

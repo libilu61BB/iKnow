@@ -4,7 +4,8 @@
     package="com.example.test">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -42,7 +43,8 @@
         <activity android:name=".LabelForEvent" />
         <activity android:name=".SetLabelForUser" />
         <activity android:name=".ContactUs" />
-        <activity android:name=".OurInfo"></activity>
+        <activity android:name=".OurInfo" />
+        <activity android:name=".ResultDetailPage"></activity>
     </application>
 
 </manifest>
