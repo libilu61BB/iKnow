@@ -331,21 +331,7 @@ public class PublicPage extends AppCompatActivity  {
                 else if(ac.getMainLabel().equals("艺术")) {
                     barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(150,186,218),PorterDuff.Mode.ADD);
                 }
-                else if(ac.getMainLabel().equals("讲座")) {
-                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(215,255,151),PorterDuff.Mode.ADD);
-                }
-                else if(ac.getMainLabel().equals("学生节")) {
-                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,153,204),PorterDuff.Mode.ADD);
-                }
-                else if(ac.getMainLabel().equals("演出")) {
-                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(128,250,255),PorterDuff.Mode.ADD);
-                }
-                else if(ac.getMainLabel().equals("赛事")) {
-                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,237,220),PorterDuff.Mode.ADD);
-                }
-                else if(ac.getMainLabel().equals("展览")) {
-                    barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,181,181),PorterDuff.Mode.ADD);
-                }
+
                 LinearLayout activityCase = new LinearLayout(this);
                 activityCase.setOrientation(LinearLayout.HORIZONTAL);
                 activityCase.setLayoutParams(layoutParams);
@@ -355,16 +341,6 @@ public class PublicPage extends AppCompatActivity  {
                 i++;
             }
         }
-    }
-    /**
-     * 设置 shape 的颜色
-     */
-    public static void setShapeColor(View view,int solidColor){
-        if(view == null){
-            return;
-        }
-        GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
-        gradientDrawable.setColor(solidColor);
     }
 
     Button.OnClickListener pageChangeListener = new Button.OnClickListener() {
