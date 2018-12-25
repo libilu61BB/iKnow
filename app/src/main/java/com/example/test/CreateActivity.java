@@ -39,11 +39,11 @@ public class CreateActivity extends AppCompatActivity {
     private ImageButton backBtn;
     private Spinner DepartmentSpinner;
     private Boolean[] flag={true,true,true,true,true,true,true,true,true,true,true,true}; //用于记录是否所有的事件都通过检查
-    private String label1,label2,label3;
+    private String label1="-",label2="-",label3="-";
     private int year;
     private int month;
     private int day;
-    private Boolean PublishSucceedFlag,UpdateFlag=true;
+    private Boolean PublishSucceedFlag=false,UpdateFlag=false;
     private String Username="q";
     public class Event{
         String eventName;
@@ -310,7 +310,37 @@ public class CreateActivity extends AppCompatActivity {
                     }
                 }
                 if(UpdateFlag==true){
-                    Publish();
+                    sendActivity Pulish = new sendActivity();
+                    Pulish.start();
+                    try {
+                        Pulish.join();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    TextView Message1;
+                    Message1 = (TextView) findViewById(R.id.setEventSuccessful);
+                    Message1.setText("发布消息失败！");
+                    Message1.setVisibility(View.VISIBLE);
+                }
+                if(PublishSucceedFlag && UpdateFlag){
+                    TextView Message1;
+                    Message1 = (TextView) findViewById(R.id.setEventSuccessful);
+                    Message1.setText("发布消息成功！");
+                    Message1.setVisibility(View.VISIBLE);
+                }
+                else if(!UpdateFlag){
+                    TextView Message1;
+                    Message1 = (TextView) findViewById(R.id.setEventSuccessful);
+                    Message1.setText("信息填写错误！");
+                    Message1.setVisibility(View.VISIBLE);
+                }
+                else {
+                    TextView Message1;
+                    Message1 = (TextView) findViewById(R.id.setEventSuccessful);
+                    Message1.setText("网络连接失败！");
+                    Message1.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -528,66 +558,65 @@ public class CreateActivity extends AppCompatActivity {
             flag[7]=false;
         }
     }
-    public void Publish(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    JSONObject Json=new JSONObject();
-                    //Json.put("Username",Username);
-                    Json.put("Name",event.eventName);
-                    Json.put("Year",event.year);
-                    Json.put("Month",event.month);
-                    Json.put("Day",event.day);
-                    Json.put("StartHour",event.starthour);
-                    Json.put("StartMin",event.startmin);
-                    Json.put("EndHour",event.endhour);
-                    Json.put("EndMin",event.endmin);
-                    Json.put("Address",event.address);
-                    Json.put("Holder",event.sponser);
-                    Json.put("Department",event.department);
-                    Json.put("Introduction",event.introduction);
-                    Json.put("Url",event.url);
-                    Json.put("MainLabel",event.MainLabel);
-                    Json.put("SecondLabel",event.SecondLabel);
-                    Json.put("ThemeLabel",event.ThemeLabel);
 
-                    String content = String.valueOf(Json);  //Json格式转成字符串来传输
+    public class sendActivity extends Thread{
+        public void run(){
+            try{
+                JSONObject Json=new JSONObject();
+                //Json.put("Username",Username);
+                Json.put("Name",event.eventName);
+                Json.put("Year",event.year);
+                Json.put("Month",event.month);
+                Json.put("Day",event.day);
+                Json.put("StartHour",event.starthour);
+                Json.put("StartMin",event.startmin);
+                Json.put("EndHour",event.endhour);
+                Json.put("EndMin",event.endmin);
+                Json.put("Address",event.address);
+                Json.put("Holder",event.sponser);
+                Json.put("Department",event.department);
+                Json.put("Introduction",event.introduction);
+                Json.put("Url",event.url);
+                Json.put("MainLabel",event.MainLabel);
+                Json.put("SecondLabel",event.SecondLabel);
+                Json.put("ThemeLabel",event.ThemeLabel);
 
-                    URL url = new URL("https://iknow.gycis.me:8443/updateData/addActivity");  //不同的请求发送到不同的URL地址，见群里的“后端网页名字设计.docx”
-                    HttpURLConnection connection =  (HttpURLConnection)url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setConnectTimeout(5000);
-                    connection.setReadTimeout(5000);
-                    connection.setDoInput(true);
-                    connection.setDoOutput(true);
+                String content = String.valueOf(Json);  //Json格式转成字符串来传输
 
-                    Log.i("Connection", content);
-                    OutputStream os = connection.getOutputStream();  //打开输出流传输数据
-                    os.write(content.getBytes());
-                    os.flush();
-                    os.close();
+                URL url = new URL("https://iknow.gycis.me:8443/updateData/addActivity");  //不同的请求发送到不同的URL地址，见群里的“后端网页名字设计.docx”
+                HttpURLConnection connection =  (HttpURLConnection)url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
 
-                    Log.i("Connection", String.valueOf(connection.getResponseCode()));  //如果ResponseCode=200说明和服务器连接正确
-                    if (connection.getResponseCode() == 200) {
-                        //以字符串格式读取服务器的返回内容，Register功能只需返回普通字符串，如果请求的是活动信息则将会返回Json格式的字符串，
-                        //可以用形如JSONObject Json = new JSONObject(String)的语句把字符串转成Json格式
-                        String result = StreamToString(connection.getInputStream());
-                        Log.i("Connection", result);
-                        if(result.equals("Add succeed"))
-                            PublishSucceedFlag = true;
-                        else if(result.equals("Add fail"))
-                            PublishSucceedFlag = false;
-                    }
-                    else{
-                        Log.i("Connection", "Fail");
-                    }
-                }catch(Exception e){
-                    e.printStackTrace();
+                Log.i("Connection", content);
+                OutputStream os = connection.getOutputStream();  //打开输出流传输数据
+                os.write(content.getBytes());
+                os.flush();
+                os.close();
+
+                Log.i("Connection", String.valueOf(connection.getResponseCode()));  //如果ResponseCode=200说明和服务器连接正确
+                if (connection.getResponseCode() == 200) {
+                    //以字符串格式读取服务器的返回内容，Register功能只需返回普通字符串，如果请求的是活动信息则将会返回Json格式的字符串，
+                    //可以用形如JSONObject Json = new JSONObject(String)的语句把字符串转成Json格式
+                    String result = StreamToString(connection.getInputStream());
+                    Log.i("Connection", result);
+                    if(result.equals("Add succeed"))
+                        PublishSucceedFlag = true;
+                    else if(result.equals("Add fail"))
+                        PublishSucceedFlag = false;
                 }
+                else{
+                    Log.i("Connection", "Fail");
+                }
+            }catch(Exception e){
+                e.printStackTrace();
             }
-        }).start();
+        }
     }
+
     public String StreamToString(InputStream is) {
         //把输入流转换成字符串
         try {

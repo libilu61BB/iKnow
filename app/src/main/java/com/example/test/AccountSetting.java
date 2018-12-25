@@ -38,7 +38,7 @@ public class AccountSetting extends AppCompatActivity {
     private Boolean[] flag1={true,true,true}; //用于记录是否所有的事件都通过检查
     public String oldpassword,newpassword,confirmpassword;
     public Boolean Flag1=true;
-    public Boolean changeFlag=true,changeDepartmentFlag=false;
+    public Boolean changeFlag=false,changeDepartmentFlag=false;
     public String name="q",college="NULL";
 
     @Override
