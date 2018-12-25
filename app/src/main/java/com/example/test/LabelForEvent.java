@@ -3,6 +3,7 @@ package com.example.test;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ActivityChooserView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -172,6 +173,9 @@ public class LabelForEvent extends AppCompatActivity {
 
     //监听Button
     public void setEventLabel(View view) {
+        TextView message;
+        message = (TextView)findViewById(R.id.TextSetEventLabelSuccessful);
+        message.setVisibility(View.INVISIBLE);
         for(int i=0;i<27;i++) {
             if(view.getId() == ButtonId[i]){ //得到是第几个标签按钮被点击
                 int clickNum = i;

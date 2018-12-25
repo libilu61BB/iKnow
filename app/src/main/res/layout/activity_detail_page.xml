@@ -13,6 +13,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -80,6 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
+                    android:textSize="14sp"
                     android:layout_height="48dp"
                     />
 
@@ -107,6 +112,7 @@
                     android:layout_toEndOf="@id/textView4"
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
+                    android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -133,6 +139,7 @@
                     android:layout_toEndOf="@id/textView5"
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
+                    android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -159,6 +166,7 @@
                     android:layout_toEndOf="@id/textView6"
                     android:layout_centerVertical="true"
                     android:layout_width="match_parent"
+                    android:textSize="14sp"
                     android:paddingTop="12.5dp"
                     android:layout_height="match_parent" />
 
@@ -186,6 +194,7 @@
                     android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:paddingTop="12.5dp"
+                    android:textSize="14sp"
                     android:layout_height="match_parent" />
 
             </RelativeLayout>
@@ -211,6 +220,7 @@
                     android:layout_toEndOf="@id/textView8"
                     android:layout_centerVertical="true"
                     android:paddingTop="12.5dp"
+                    android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -261,6 +271,9 @@
 
             <TextView
                 android:id="@+id/tv8"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:textSize="14sp"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
 
@@ -278,7 +291,10 @@
                 android:id="@+id/tv7"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:autoLink="web" />
+                android:autoLink="web"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="center" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

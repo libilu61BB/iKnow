@@ -111,7 +111,7 @@ public class CreateActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         DepartmentSpinner.setAdapter(adapter);
         publishBtn=(Button) findViewById(R.id.submitAll);
-        backBtn=(ImageButton)findViewById(R.id.baccktoSetting);
+        backBtn=(ImageButton)findViewById(R.id.backtoSetting);
         nameText = (EditText) findViewById(R.id.inputName);
         datePicker=(DatePicker) findViewById(R.id.inputeDate);
         starthourText=(EditText) findViewById(R.id.inputStartHour);

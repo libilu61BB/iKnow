@@ -14,70 +14,57 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@android:color/background_light"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="72dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/baccktoSetting"
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@android:color/background_light"
-                        app:srcCompat="@drawable/back" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="64dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:baselineAligned="false"
-                    android:gravity="center"
-                    android:lineSpacingExtra="18sp"
-                    android:text="发布消息"
-                    android:textSize="20sp"
+                <Button
+                    android:id="@+id/backtoSetting"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/back"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"></LinearLayout>
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="发布消息"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:src="@drawable/line" />
+            </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/lineNotice1"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:orientation="vertical"></LinearLayout>
+                android:layout_height="2dp"
+                android:layout_marginStart="5dp"
+                android:background="@android:color/darker_gray"
+                android:orientation="horizontal">
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,8 +103,10 @@
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
                         android:text="*请正确填写事件名称"
+                        android:textAlignment="textStart"
                         android:textColor="@android:color/holo_red_dark"
-                        android:visibility="invisible" />
+                        android:visibility="invisible"
+                        tools:ignore="RtlCompat" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -240,28 +229,31 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="300dp"
+                        android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/starthourerror"
-                            android:layout_width="150dp"
+                            android:layout_width="0dp"
                             android:layout_height="20dp"
-                            android:layout_weight="1"
+                            android:layout_weight="0.5"
                             android:gravity="center_horizontal|center"
                             android:text="*请正确填写"
+
+                            android:textAlignment="textStart"
                             android:textColor="@android:color/holo_red_dark"
                             android:visibility="invisible" />
 
                         <TextView
                             android:id="@+id/startminerror"
-                            android:layout_width="150dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.5"
                             android:gravity="fill_vertical|center_horizontal"
                             android:text="*请正确填写"
+                            android:textAlignment="viewStart"
                             android:textColor="@android:color/holo_red_dark"
                             android:visibility="invisible" />
                     </LinearLayout>
@@ -341,28 +333,30 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="300dp"
+                        android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/endhourerror"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="0.5"
                             android:gravity="center_horizontal|center"
                             android:text="*请正确填写"
+                            android:textAlignment="textStart"
                             android:textColor="@android:color/holo_red_dark"
                             android:visibility="invisible" />
 
                         <TextView
                             android:id="@+id/endminerror"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="0.5"
                             android:gravity="center_horizontal|center"
                             android:text="*请正确填写"
+                            android:textAlignment="textStart"
                             android:textColor="@android:color/holo_red_dark"
                             android:visibility="invisible" />
                     </LinearLayout>
@@ -409,6 +403,7 @@
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
                         android:text="*请正确填写举办地址"
+                        android:textAlignment="textStart"
                         android:textColor="@android:color/holo_red_dark"
                         android:visibility="invisible" />
 
@@ -455,6 +450,7 @@
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
                         android:text="*请正确填写组织名称"
+                        android:textAlignment="textStart"
                         android:textColor="@android:color/holo_red_dark"
                         android:visibility="invisible" />
                 </LinearLayout>
@@ -496,6 +492,7 @@
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
                         android:text="*请选择所属单位"
+                        android:textAlignment="textStart"
                         android:textColor="@android:color/holo_red_dark"
                         android:visibility="invisible" />
                 </LinearLayout>
