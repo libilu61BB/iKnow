@@ -46,7 +46,6 @@ public class DetailPage extends AppCompatActivity {
             }
         });
         GetActivity();
-        setActivity();
     }
 
     protected void GetActivity(){
@@ -78,6 +77,7 @@ public class DetailPage extends AppCompatActivity {
                         String result = StreamToString(connection.getInputStream());
                         JSONObject thisJson = new JSONObject(result);
                         Log.i("Connection", result);
+                        setActivity();
                     }
                     else{
                         Log.i("Connection", "Fail");
