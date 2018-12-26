@@ -2,10 +2,12 @@ package com.example.test;
 
 public class Activity {
     private int activityId;
+
     private int startHour;
     private int startMinute;
     private int endHour;
     private int endMinute;
+
     private String introduction;
     private String mainLabel;
     private String subLabel;
@@ -18,12 +20,14 @@ public class Activity {
     private int day;
     private String name;
 
+
     public Activity() {
         this.activityId = activityId;
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.endHour = endHour;
         this.endMinute = endMinute;
+
         this.introduction = introduction;
         this.mainLabel = mainLabel;
         this.subLabel = subLabel;
@@ -60,8 +64,23 @@ public class Activity {
     public void setActivityId(int activityId) {
         this.activityId = activityId;
     }
-    public void setYear(int year) {
-        this.year = year;
+
+
+    public int getYear(){return year;}
+
+    public void setYear(int year){this.year = year;}
+
+    public int getMonth(){return month;}
+
+    public void setMonth(int month){this.month = month;}
+
+    public int getDay(){return day;}
+
+    public void setDay(int year){this.day = day;}
+
+    public String getStartTime() {
+        return startTime;
+
     }
     public void setMonth(int month) {
         this.month = month;

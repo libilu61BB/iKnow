@@ -34,10 +34,12 @@ import java.util.List;
 public class PublicPage extends AppCompatActivity  {
     Button browser, private_btn, setting_btn;
     Button[] dateBtns = new Button[14];
+
     int[] date = new int[3];
     String username;
     List<Activity> actList = new ArrayList<Activity>();
     int i = 0;
+
     private LinearLayout dateColumn;
     private LinearLayout publicActivity;
     private final static int REQUESTCODE = 1;
@@ -353,6 +355,7 @@ public class PublicPage extends AppCompatActivity  {
             initDateColumn(n);
         }
     };
+
     Button.OnClickListener activityDetailListener = new Button.OnClickListener(){
         public void onClick(View v){  //事件详情页面监听
             int n = v.getId();
@@ -376,6 +379,7 @@ public class PublicPage extends AppCompatActivity  {
             }
         }
     };
+
 }
 
 

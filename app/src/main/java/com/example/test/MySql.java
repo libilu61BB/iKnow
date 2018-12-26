@@ -1,4 +1,5 @@
 
+
 package com.example.test;
 
 import android.content.ContentValues;
@@ -6,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 
 public class MySql extends SQLiteOpenHelper {
     private final static String DatebaseName = "LocalData.db";
@@ -68,7 +70,9 @@ public class MySql extends SQLiteOpenHelper {
         cv.put("url", url);
         cv.put("name", name);
         db.insert(TableName, null, cv);
+
         db.close();
+
     }
 
     public void Delete(int id){
@@ -83,3 +87,4 @@ public class MySql extends SQLiteOpenHelper {
         db.close();
     }
 }
+
