@@ -45,9 +45,7 @@ public class PublicPage extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //WriteToFile("UseInformation.txt","q");
-       getUsername();
-       // username = "q";
+        getUsername();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_public_page);
         browser = findViewById(R.id.BrowserButton);
@@ -107,7 +105,6 @@ public class PublicPage extends AppCompatActivity  {
                         JSONObject[] ac = new JSONObject[acNum];
                         actList.clear();
                         List<Activity> tempActList = new ArrayList<Activity>();
-                        System.out.println(actList);
                         for(int i = 0; i < acNum; i++){
                             ac[i] = new JSONObject(acList.getString("Activity"+String.valueOf(i+1)));
                             Activity temp = new Activity();
@@ -128,10 +125,8 @@ public class PublicPage extends AppCompatActivity  {
                             temp.setIntroduction(ac[i].getString("Introduction"));
                             temp.setUrl(ac[i].getString("Url"));
                             tempActList.add(temp);
-                            System.out.println(temp.getActivityId());
                         }
                         actList = new ArrayList<>(tempActList);
-                        System.out.println(actList);
                     }
                     else{
                         Log.i("Connection", "Fail");
@@ -185,43 +180,6 @@ public class PublicPage extends AppCompatActivity  {
         date[2] = day;
 
     }
-    public void WriteToFile(String filename, String content){
-        try{
-            File file = new File(Environment.getExternalStorageDirectory(),filename);
-            if(!file.exists())
-                file.createNewFile();
-            FileOutputStream os = new FileOutputStream(file);
-            os.write(content.getBytes());
-            os.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    //马梓源：getUsername
-    /*private String getUsername(){
-        String encoding = "UTF-8";
-        File file = new File("UseInformation.txt");
-        Long filelength = file.length();
-        byte[] filecontent = new byte[filelength.intValue()];
-        try {
-            FileInputStream in = new FileInputStream(file);
-            in.read(filecontent);
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            return new String(filecontent, encoding);
-        } catch (UnsupportedEncodingException e) {
-            System.err.println("The OS does not support " + encoding);
-            e.printStackTrace();
-            return null;
-        }
-
-    }*/
     /**
      * 初始化日历栏
      */
@@ -290,12 +248,9 @@ public class PublicPage extends AppCompatActivity  {
         }
         //System.out.println(actList[0].getStartMinute());
         if (actList == null){
-            System.out.println("没东西");
             publicActivity.addView(null);
         }
         else {
-            int num = actList.size();//当天事件数目
-            System.out.println(num);
             LinearLayout activityList = publicActivity;
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); // 每行的水平LinearLayout
             layoutParams.setMargins(0, 0, 0, 0);
@@ -306,9 +261,6 @@ public class PublicPage extends AppCompatActivity  {
             for (Activity ac : actList) {
                 String a = "";
                 String b = "";
-                //System.out.println(actList[0].getStartMinute());
-                //System.out.println(actList[0].getMainLabel());
-                //System.out.println(ac.getActivityId());
                 if (ac.getStartMinute() < 10) {
                     a = "0" + String.valueOf(ac.getStartMinute());
                 } else {
@@ -335,7 +287,6 @@ public class PublicPage extends AppCompatActivity  {
                 circleBtn.setLayoutParams(circleButtonParams);
                 barBtn.setLayoutParams(barButtonParams);
                 barBtn.setOnClickListener(activityDetailListener);
-                //设置颜色
                 if(ac.getMainLabel().equals("科创")) {
                     barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(191,191,191),PorterDuff.Mode.ADD);
                 }
@@ -369,6 +320,7 @@ public class PublicPage extends AppCompatActivity  {
                 else if(ac.getMainLabel().equals("艺术")) {
                     barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(150,186,218),PorterDuff.Mode.ADD);
                 }
+
                 LinearLayout activityCase = new LinearLayout(this);
                 activityCase.setOrientation(LinearLayout.HORIZONTAL);
                 activityCase.setLayoutParams(layoutParams);
@@ -379,18 +331,52 @@ public class PublicPage extends AppCompatActivity  {
             }
         }
     }
-    /**
-     * 设置 shape 的颜色
-     */
-    public static void setShapeColor(View view,int solidColor){
-        if(view == null){
-            return;
-        }
-        GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
-        gradientDrawable.setColor(solidColor);
-    }
 
-    //从本地文件里获得用户标签情况
+    Button.OnClickListener pageChangeListener = new Button.OnClickListener() {
+        public void onClick(View v) { //转换到搜索页面的监听
+            Intent intent = new Intent(PublicPage.this, SearchPage.class);
+            startActivity(intent);
+            PublicPage.this.finish();
+        }
+    };
+
+    Button.OnClickListener dateChangeListener = new Button.OnClickListener() {
+        public void onClick(View v){ //日期栏变动的监听
+            int n = v.getId();
+            publicActivity.removeAllViews();
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, n);
+            String targetDay = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
+            GetActivity(targetDay);
+            initPublicActivity();
+            dateColumn.removeAllViews();
+            initDateColumn(n);
+        }
+    };
+    Button.OnClickListener activityDetailListener = new Button.OnClickListener(){
+        public void onClick(View v){  //事件详情页面监听
+            int n = v.getId();
+            int no = actList.get(n-500).getActivityId();
+            Intent intent = new Intent(PublicPage.this, ResultDetailPage.class);
+            intent.putExtra("ActivityNum",no);
+            startActivityForResult(intent,REQUESTCODE);
+        }
+    };
+    Button.OnClickListener switchButtonListener = new Button.OnClickListener() {
+        public void onClick(View v) { //页面转换栏监听
+            if(v.getId()==R.id.PrivateButton) {
+                Intent intent = new Intent(PublicPage.this, PrivatePage.class);
+                startActivity(intent);
+                PublicPage.this.finish();
+            }
+            else if(v.getId()==R.id.SettingButton){
+                Intent intent = new Intent(PublicPage.this, SettingPage.class);
+                startActivity(intent);
+                PublicPage.this.finish();
+            }
+        }
+    };
+
     private String GetData(String FileName){
         try {
             File file = new File(Environment.getExternalStorageDirectory(),FileName);
@@ -420,54 +406,6 @@ public class PublicPage extends AppCompatActivity  {
             e.printStackTrace();
         }
     }
-
-    Button.OnClickListener pageChangeListener = new Button.OnClickListener() {
-        public void onClick(View v) { //转换到搜索页面的监听
-            Intent intent = new Intent(PublicPage.this, SearchPage.class);
-            startActivity(intent);
-           // PublicPage.this.finish();
-        }
-    };
-
-    Button.OnClickListener dateChangeListener = new Button.OnClickListener() {
-        public void onClick(View v){ //日期栏变动的监听
-            int n = v.getId();
-            publicActivity.removeAllViews();
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_MONTH, n);
-            System.out.println(cal);
-            String targetDay = new SimpleDateFormat("yyyyMMdd").format(cal.getTime());
-            System.out.println(targetDay);
-            GetActivity(targetDay);
-            initPublicActivity();
-            dateColumn.removeAllViews();
-            initDateColumn(n);
-        }
-    };
-    Button.OnClickListener activityDetailListener = new Button.OnClickListener(){
-        public void onClick(View v){  //事件详情页面监听
-            int n = v.getId();
-            int no = actList.get(n-500).getActivityId();
-            //GetActivityFromId(actList.get(n-500).getActivityId());
-            Intent intent = new Intent(PublicPage.this, ResultDetailPage.class);
-            intent.putExtra("ActivityNum",no);
-            startActivityForResult(intent,REQUESTCODE);
-        }
-    };
-    Button.OnClickListener switchButtonListener = new Button.OnClickListener() {
-        public void onClick(View v) { //页面转换栏监听
-            if(v.getId()==R.id.PrivateButton) {
-                Intent intent = new Intent(PublicPage.this, PrivatePage.class);
-                startActivity(intent);
-                PublicPage.this.finish();
-            }
-            else if(v.getId()==R.id.SettingButton){
-                Intent intent = new Intent(PublicPage.this, SettingPage.class);
-                startActivity(intent);
-                PublicPage.this.finish();
-            }
-        }
-    };
 }
 
 

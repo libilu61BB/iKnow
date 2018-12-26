@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,24 +23,34 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 
 public class SearchPage extends AppCompatActivity {
 
-    private static String[] testHistory = {"科研","创新","研究生","智能汽车大赛",
-            "佐贺偶像是传奇","口腔喷剂","悲惨世界","简明物理化学","魂","1024节",
-            "环境学院","神奇口袋","KDA","1001","すバらしい","大学物理","充电台灯",
-            "毕业剧","philips","Python"};
     private static String[] labelNames = {"科创","计算机","体育","实践","外语","经济","创业","文学","电影","志愿",
             "艺术","讲座","学生节","展览","赛事","演出","全部标签"};
+    String[] historyName = new String[20];
     List<Activity> acResult = new ArrayList<Activity>();
     LinearLayout historyView, resultView, switchView, cover, resultList;
     SearchView browser;
@@ -49,6 +61,7 @@ public class SearchPage extends AppCompatActivity {
     int i = 0;
     String search = "";//放置搜索内容
     private final static int REQUESTCODE = 1;
+    BlockingQueue<String> testHistoryList = new ArrayBlockingQueue<String>(20);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +83,13 @@ public class SearchPage extends AppCompatActivity {
                 cover.removeAllViews();
                 cover.getBackground().setAlpha(0);
                 search = query;
+                try{
+                    renewHistoryList(query);
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+                CreateHistoryList();
                 GetSelectedActivity();
-                System.out.println(acResult);
                 initSwitchView();
                 initResultView();
                 try{
@@ -103,14 +121,58 @@ public class SearchPage extends AppCompatActivity {
         switchView = findViewById(R.id.switchColumn);
         resultList = findViewById(R.id.result_list);
         cover = findViewById(R.id.cover);
+        try {
+            File file = new File(Environment.getExternalStorageDirectory(), "History.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        }catch(IOException e){}
+        try{
+            readHistoryList(testHistoryList);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
         initHistoryView();
+    }
+    public void renewHistoryList(String s) throws InterruptedException{
+        boolean Flag = false;
+        File file = new File(Environment.getExternalStorageDirectory(), "History.txt");
+        System.out.println("这个文件被执行了");
+        if(file.exists()){
+            System.out.println("这个文件被执行了");
+            try {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader br = new BufferedReader(fileReader);
+                String lineContent;
+                while((lineContent = br.readLine())!=null){
+                    if(s.equals(lineContent)){
+                        Flag = true;
+                    }
+                }
+                br.close();
+                fileReader.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("no this file");
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("io exception");
+                e.printStackTrace();
+            }
+        }
+        if(!Flag) {
+            if (testHistoryList.size() < 20) {
+                testHistoryList.put(s);
+            } else {
+                testHistoryList.poll();
+                testHistoryList.put(s);
+            }
+        }
     }
     /**
      * 设置历史记录栏
      */
     private void initHistoryView(){
         LinearLayout historyCase = historyView;
-        int size = testHistory.length;
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(10, 1, 10, 1);
         LinearLayout.LayoutParams historyBarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -128,9 +190,11 @@ public class SearchPage extends AppCompatActivity {
         searchHistory.setText("搜索历史");
         historyHintBar.addView(searchHistory);
         historyCase.addView(historyHintBar);
-
-        for(int i = 0; i < size; i++){
-            String item = testHistory[i];
+        BlockingQueue<String> tempHistory= new ArrayBlockingQueue<String>(20);
+        tempHistory.addAll(testHistoryList);
+        for(int i = 0; i < testHistoryList.size(); i++){
+            String item = tempHistory.poll();
+            historyName[i] = item;
             LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             int length= item.length();
 
@@ -251,7 +315,8 @@ public class SearchPage extends AppCompatActivity {
                 b = String.valueOf(ac.getEndMinute());
             }
             circleButtonText = String.valueOf(ac.getStartHour()) + ":" + a + "\n————\n" + String.valueOf(ac.getEndHour()) + ":" + b;
-            barButtonText = ac.getName() + "\n\n" + ac.getPlace();LinearLayout.LayoutParams circleButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            barButtonText = ac.getName() + "\n\n" + ac.getPlace();
+            LinearLayout.LayoutParams circleButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             circleButtonParams.setMargins(0, 0, 0, 0);
             circleButtonParams.weight = 5;
             LinearLayout.LayoutParams barButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -265,7 +330,6 @@ public class SearchPage extends AppCompatActivity {
             barBtn.setLayoutParams(barButtonParams);
             barBtn.setOnClickListener(activityDetailListener);
             barBtn.setId(800+i);
-                        //设置颜色
             if(ac.getMainLabel().equals("科创")) {
                 barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(191,191,191),PorterDuff.Mode.ADD);
             }
@@ -298,6 +362,21 @@ public class SearchPage extends AppCompatActivity {
             }
             else if(ac.getMainLabel().equals("艺术")) {
                 barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(150,186,218),PorterDuff.Mode.ADD);
+            }
+            else if(ac.getMainLabel().equals("讲座")) {
+                barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(215,255,151),PorterDuff.Mode.ADD);
+            }
+            else if(ac.getMainLabel().equals("学生节")) {
+                barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,153,204),PorterDuff.Mode.ADD);
+            }
+            else if(ac.getMainLabel().equals("演出")) {
+                barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(128,250,255),PorterDuff.Mode.ADD);
+            }
+            else if(ac.getMainLabel().equals("赛事")) {
+                barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,237,220),PorterDuff.Mode.ADD);
+            }
+            else if(ac.getMainLabel().equals("展览")) {
+                barBtn.getBackground().setColorFilter(android.graphics.Color.rgb(255,181,181),PorterDuff.Mode.ADD);
             }
             LinearLayout activityCase = new LinearLayout(this);
             activityCase.setOrientation(LinearLayout.HORIZONTAL);
@@ -657,6 +736,54 @@ public class SearchPage extends AppCompatActivity {
         }).start();
     }
 
+    public void readHistoryList(BlockingQueue<String> m) throws InterruptedException{
+        File file = new File(Environment.getExternalStorageDirectory(), "History.txt");
+        if(file.exists()){
+            try {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader br = new BufferedReader(fileReader);
+                String lineContent;
+                while((lineContent = br.readLine())!=null){
+                    m.put(lineContent);
+                }
+                br.close();
+                fileReader.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void CreateHistoryList(){
+        try{
+            BlockingQueue<String> history = new ArrayBlockingQueue<String>(20);
+            history.addAll(testHistoryList);
+            String b = "";
+            for(int k = 0; k < testHistoryList.size();k++){
+                String a = history.poll()+"\n";
+                b += a ;
+            }
+            WriteToFile("History.txt", b);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void WriteToFile(String filename, String content){
+        try{
+            File file = new File(Environment.getExternalStorageDirectory(),filename);
+            if(!file.exists())
+                file.createNewFile();
+            FileOutputStream os = new FileOutputStream(file);
+            os.write(content.getBytes());
+            os.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     Button.OnClickListener returnButtonListener = new Button.OnClickListener() {
         public void onClick(View view) { //返回公共日历按钮监听
             Intent intent = new Intent(SearchPage.this, PublicPage.class);
@@ -674,7 +801,7 @@ public class SearchPage extends AppCompatActivity {
             historyView.removeAllViews();
             initSwitchView();
             initResultView();
-            search = testHistory[n-100];
+            search = historyName[n-100];
             GetSelectedActivity();
             try{
                 Thread.sleep(1500);

@@ -1,6 +1,5 @@
 package com.example.test;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -8,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,11 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultDetailPage extends AppCompatActivity {
-    String username;
     TextView[] mTextview=new TextView[9];
     LinearLayout detailbtnList;
     Button backButton,lastButton;
     String addState;
+    String username;
     Activity temp = new Activity();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +57,6 @@ public class ResultDetailPage extends AppCompatActivity {
         GetActivityFromId(resId);
         setActivity();
     }
-    /**
-     * 从主页面接收事件id发送给后端，后端发送事件
-     */
 
     public void getUsername(){
         try{
@@ -71,6 +66,15 @@ public class ResultDetailPage extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 从主页面接收事件id发送给后端，后端发送事件
+     */
+
+
+    /**
+     * 从主页面接收事件id发送给后端，后端发送事件
+     */
     protected void GetActivityFromId(final int i){
         new Thread(new Runnable() {
             @Override
@@ -101,10 +105,11 @@ public class ResultDetailPage extends AppCompatActivity {
                         String result = StreamToString(connection.getInputStream());
                         JSONObject lastJson = new JSONObject(result);
                         addState = lastJson.getString("Private");
-                        System.out.println(addState);
                         if(addState.equals("False")){
                             lastButton.setVisibility(View.VISIBLE);
                         }
+                        else
+                            lastButton.setVisibility(View.INVISIBLE);
                         JSONObject thisJson = new JSONObject(lastJson.getString("Activity"));
                         temp.setActivityId(thisJson.getInt("Id"));
                         temp.setStartHour(thisJson.getInt("Start_hour"));
@@ -143,7 +148,7 @@ public class ResultDetailPage extends AppCompatActivity {
                 try{
                     JSONObject Json = new JSONObject();  //把数据存成Json格式
                     Json.put("ActivityID", i);
-                    Json.put("Username","q");
+                    Json.put("Username",username);
                     String content = String.valueOf(Json);  //Json格式转成字符串来传输
 
                     URL url = new URL("https://iknow.gycis.me/updateData/addPrivateActivity");  //不同的请求发送到不同的URL地址，见群里的“后端网页名字设计.docx”
@@ -205,7 +210,7 @@ public class ResultDetailPage extends AppCompatActivity {
         }catch(InterruptedException e){
             e.printStackTrace();
         }
-       // mTextview[0].setText(temp.getName());
+        mTextview[0].setText("事件详情");
         mTextview[1].setText(temp.getName());
         mTextview[2].setText(temp.getYear()+"年"+temp.getMonth()+"月"+temp.getDay()+"日");
         if(temp.getStartMinute()<10) {
@@ -225,17 +230,15 @@ public class ResultDetailPage extends AppCompatActivity {
         mTextview[7].setText(temp.getIntroduction());
         mTextview[8].setText(temp.getUrl());
         LinearLayout ButtonList = detailbtnList;
-        LinearLayout.LayoutParams detailButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams detailButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
         List<String> TagString = new ArrayList<String>();
         if(temp.getMainLabel()!="null"){TagString.add(temp.getMainLabel());}
         if(temp.getSubLabel()!="null"){TagString.add(temp.getSubLabel());}
         if(temp.getActivityLabel()!="null"){
-            System.out.println(temp.getActivityLabel().length());
             TagString.add(temp.getActivityLabel());
         }
-        System.out.println(TagString);
         for (String s:TagString){
             Button childBtn = (Button) LayoutInflater.from(this).inflate(R.layout.history_button, null);
             childBtn.setText(s);
@@ -245,6 +248,23 @@ public class ResultDetailPage extends AppCompatActivity {
 
 
     }
+    /**
+     * 添加的时间写入本地数据库
+     */
+    private void writeIntoMySql(){
+        MySql mysql = new MySql(this);
+        mysql.Delete();
+        mysql.Insert(temp.getActivityId(),temp.getYear(),temp.getMonth(),temp.getDay(),temp.getStartHour(),temp.getStartMinute(),
+                temp.getEndHour(),temp.getEndMinute(),temp.getIntroduction(),temp.getMainLabel(),temp.getSubLabel(),temp.getActivityLabel(),
+                temp.getPlace(),temp.getHost(),temp.getUrl(),temp.getName());
+    }
+    Button.OnClickListener addBtnListener = new Button.OnClickListener(){
+        public void onClick(View v){  //
+            writeIntoMySql();
+            PushActivityToServer(temp.getActivityId());
+            ResultDetailPage.this.finish();
+        }
+    };
 
     private String GetData(String FileName){
         try {
@@ -265,22 +285,5 @@ public class ResultDetailPage extends AppCompatActivity {
             return null;
         }
     }
-    /**
-     * 添加的时间写入本地数据库
-     */
-    private void writeIntoMySql(){
-        MySql mysql = new MySql(this);
-        mysql.Delete();
-        mysql.Insert(temp.getActivityId(),temp.getYear(),temp.getMonth(),temp.getDay(),temp.getStartHour(),temp.getStartMinute(),
-                temp.getEndHour(),temp.getEndMinute(),temp.getIntroduction(),temp.getMainLabel(),temp.getSubLabel(),temp.getActivityLabel(),
-                temp.getPlace(),temp.getHost(),temp.getUrl(),temp.getName());
-    }
-    Button.OnClickListener addBtnListener = new Button.OnClickListener(){
-        public void onClick(View v){  //
-            writeIntoMySql();
-            PushActivityToServer(temp.getActivityId());
-            System.out.println("成功");
-            ResultDetailPage.this.finish();
-        }
-    };
 }
+

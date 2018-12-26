@@ -94,7 +94,7 @@ public class CreateActivity extends AppCompatActivity {
     }  //Event类的定义
     Event event=new Event();
 
-    private String[] items = {"请选择您的院系:","建筑学院","经济管理学院","土木水利学院","公共管理学院","环境学院","马克思主义学院","人文学院","机械工程学院","社会科学学院","信息科学技术学院","法学院","新闻与传播学院","五道口金融学院","材料学院","美术学院","工程物理系","化学工程系","核能与新能源技术研究院","理学院","体育部","艺术教育中心","生命科学学院","医学院","药学院","交叉信息研究院","苏世明书院","新雅书院"};
+    private String[] items = {"请选择您的院系:","建筑学院","经济管理学院","土木水利学院","公共管理学院","环境学院","马克思主义学院","人文学院","机械工程学院","社会科学学院","信息科学技术学院","法学院","新闻与传播学院","五道口金融学院","材料学院","美术学院","工程物理系","化学工程系","核能与新能源技术研究院","理学院","体育部","艺术教育中心","生命科学学院","医学院","药学院","交叉信息研究院","苏世明书院","新雅书院","其他"};
     private List<String> DepartmentChoice(){
         List<String> data = new ArrayList<>();
         data.add("请选择您的院系:");
@@ -600,10 +600,11 @@ public class CreateActivity extends AppCompatActivity {
         public void run(){
             try{
                 JSONObject Json=new JSONObject();
+                int month = event.month + 1;
                 //Json.put("Username",Username);
                 Json.put("Name",event.eventName);
                 Json.put("Year",event.year);
-                Json.put("Month",event.month);
+                Json.put("Month",month);
                 Json.put("Day",event.day);
                 Json.put("StartHour",event.starthour);
                 Json.put("StartMin",event.startmin);
