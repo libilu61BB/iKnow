@@ -93,7 +93,7 @@ public class CreateActivity extends AppCompatActivity {
         public void setDate(int yearset,int monthset,int dayset){year=yearset;month=monthset;day=dayset;}
     }  //Event类的定义
     Event event=new Event();
-
+    //定义下拉框
     private String[] items = {"请选择您的院系:","建筑学院","经济管理学院","土木水利学院","公共管理学院","环境学院","马克思主义学院","人文学院","机械工程学院","社会科学学院","信息科学技术学院","法学院","新闻与传播学院","五道口金融学院","材料学院","美术学院","工程物理系","化学工程系","核能与新能源技术研究院","理学院","体育部","艺术教育中心","生命科学学院","医学院","药学院","交叉信息研究院","苏世明书院","新雅书院"};
     private List<String> DepartmentChoice(){
         List<String> data = new ArrayList<>();
@@ -141,6 +141,7 @@ public class CreateActivity extends AppCompatActivity {
                 checkName(name);
             }
         });
+        //开始小时文本框监听器
         starthourText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -154,6 +155,7 @@ public class CreateActivity extends AppCompatActivity {
                 checkStartHour(starthour);
             }
         });
+        //开始分钟文本框监听器
         startminText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -167,6 +169,7 @@ public class CreateActivity extends AppCompatActivity {
                 checkStartMin(startmin);
             }
         });
+        //终止时间小时的监听器
         endhourText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -181,7 +184,7 @@ public class CreateActivity extends AppCompatActivity {
                 checkEndTime();
             }
         });
-
+        //终止事件监听器
         endminText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -196,7 +199,7 @@ public class CreateActivity extends AppCompatActivity {
                 checkEndTime();
             }
         });
-
+        //地址文本框监听器
         addressText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -210,6 +213,7 @@ public class CreateActivity extends AppCompatActivity {
                 checkAddress(address);
             }
         });
+        //填写发布事件者的文本框监听器
         sponserText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -236,11 +240,7 @@ public class CreateActivity extends AppCompatActivity {
                 checkDate(year,month,day);
             }
         });
-
-//        final Intent intent = getIntent();
-//        label1 = intent.getStringExtra("MainLabel");
-//        label2=intent.getStringExtra("SecondLabel");
-//        label3=intent.getStringExtra("ThemeLabel");
+        //提交文件的点击监听按钮
         publishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -556,6 +556,7 @@ public class CreateActivity extends AppCompatActivity {
             flag[7]=false;
         }
     }
+    //下拉框的监听器，用于监听下拉框的变化
     private class MySelectedListener implements OnItemSelectedListener{
         public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,long arg3){
             if(arg2==0){
