@@ -228,15 +228,17 @@ public class ResultDetailPage extends AppCompatActivity {
         mTextview[5].setText(temp.getPlace());
         mTextview[6].setText(temp.getHost());
         mTextview[7].setText(temp.getIntroduction());
-        mTextview[8].setText(temp.getUrl());
+        if(!temp.getUrl().equals("null")) {
+            mTextview[8].setText(temp.getUrl());
+        }
         LinearLayout ButtonList = detailbtnList;
         LinearLayout.LayoutParams detailButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
         List<String> TagString = new ArrayList<String>();
-        if(temp.getMainLabel()!="null"){TagString.add(temp.getMainLabel());}
-        if(temp.getSubLabel()!="null"){TagString.add(temp.getSubLabel());}
-        if(temp.getActivityLabel()!="null"){
+        if(!temp.getMainLabel().equals("无")){TagString.add(temp.getMainLabel());}
+        if(!temp.getSubLabel().equals("无")){TagString.add(temp.getSubLabel());}
+        if(!temp.getActivityLabel().equals("无")){
             TagString.add(temp.getActivityLabel());
         }
         for (String s:TagString){
@@ -253,7 +255,6 @@ public class ResultDetailPage extends AppCompatActivity {
      */
     private void writeIntoMySql(){
         MySql mysql = new MySql(this);
-        mysql.Delete();
         mysql.Insert(temp.getActivityId(),temp.getYear(),temp.getMonth(),temp.getDay(),temp.getStartHour(),temp.getStartMinute(),
                 temp.getEndHour(),temp.getEndMinute(),temp.getIntroduction(),temp.getMainLabel(),temp.getSubLabel(),temp.getActivityLabel(),
                 temp.getPlace(),temp.getHost(),temp.getUrl(),temp.getName());

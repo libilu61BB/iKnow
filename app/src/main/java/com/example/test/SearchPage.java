@@ -315,7 +315,7 @@ public class SearchPage extends AppCompatActivity {
                 b = String.valueOf(ac.getEndMinute());
             }
             circleButtonText = String.valueOf(ac.getStartHour()) + ":" + a + "\n————\n" + String.valueOf(ac.getEndHour()) + ":" + b;
-            barButtonText = ac.getName() + "\n\n" + ac.getPlace();
+            barButtonText = ac.getName() + "\n\n" + ac.getYear() + "年" + ac.getMonth() + "月" + ac.getDay() + "日" + "\t\t" + ac.getPlace();
             LinearLayout.LayoutParams circleButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             circleButtonParams.setMargins(0, 0, 0, 0);
             circleButtonParams.weight = 5;

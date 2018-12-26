@@ -168,15 +168,15 @@ public class DetailPage extends AppCompatActivity {
         mTextview[6].setText(cursor.getString(cursor.getColumnIndex("host")));
         tag1.setText(cursor.getString(cursor.getColumnIndex("mainLabel")));
 
-        if(cursor.getString(cursor.getColumnIndex("subLabel")).equals("null") && cursor.getString(cursor.getColumnIndex("activityLabel")).equals("null")){
+        if(cursor.getString(cursor.getColumnIndex("subLabel")).equals("无") && cursor.getString(cursor.getColumnIndex("activityLabel")).equals("无")){
             tag2.setVisibility(View.INVISIBLE);
             tag3.setVisibility(View.INVISIBLE);
         }
-        else if(cursor.getString(cursor.getColumnIndex("subLabel")).equals("null")){
+        else if(cursor.getString(cursor.getColumnIndex("subLabel")).equals("无")){
             tag2.setText(cursor.getString(cursor.getColumnIndex("activityLabel")));
             tag3.setVisibility(View.INVISIBLE);
         }
-        else if(cursor.getString(cursor.getColumnIndex("activityLabel")).equals("null")){
+        else if(cursor.getString(cursor.getColumnIndex("activityLabel")).equals("无")){
             tag2.setText(cursor.getString(cursor.getColumnIndex("subLabel")));
             tag3.setVisibility(View.INVISIBLE);
         }
