@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">ikonw2</string>
+    <string name="app_name">iKnow</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_search_page">SearchPage</string>
+    <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 </resources>
