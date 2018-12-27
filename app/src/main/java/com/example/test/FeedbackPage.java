@@ -25,6 +25,7 @@ public class FeedbackPage extends AppCompatActivity {
     private Button Submit;
     private String[] TagContent = {"功能建议", "使用问题", "内容相关"};
     private TextView SubmitSucceed;
+    private boolean feedbackFlag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +35,7 @@ public class FeedbackPage extends AppCompatActivity {
         Back = findViewById(R.id.ButtonBack);
         Back.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Intent intent = new Intent(FeedbackPage.this, PrivatePage.class);  //之后更改--------
-                startActivity(intent);
+                FeedbackPage.this.finish();
             }
         });
 
@@ -45,11 +45,11 @@ public class FeedbackPage extends AppCompatActivity {
                 public void onClick(View v){
                     int n = v.getId() - R.id.ButtonTag1;
                     if(TagFlag[n] == false){
-                        ButtonTag[n].setBackgroundColor(Color.parseColor("#64c6a121"));
+                        ButtonTag[n].setBackgroundColor(Color.parseColor("#b9b6b6"));
                         TagFlag[n] = true;
                     }
                     else{
-                        ButtonTag[n].setBackgroundColor(Color.parseColor("#b9b6b6"));
+                        ButtonTag[n].setBackgroundColor(Color.parseColor("#dcdcdc"));
                         TagFlag[n] = false;
                     }
                 }
@@ -57,6 +57,7 @@ public class FeedbackPage extends AppCompatActivity {
         }
 
         FeedBack = findViewById(R.id.FeedBack);
+        SubmitSucceed = findViewById(R.id.SubmitSucceed);
 
         Submit = findViewById(R.id.ButtonSubmit);
         Submit.setOnClickListener(new View.OnClickListener(){
@@ -68,19 +69,38 @@ public class FeedbackPage extends AppCompatActivity {
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-                SubmitSucceed.setVisibility(View.VISIBLE);
+                if(feedbackFlag){
+                    SubmitSucceed.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
-        SubmitSucceed = findViewById(R.id.SubmitSucceed);
+
     }
 
     private class Submit extends Thread{
         public void run() {
             try {
                 String feedback = FeedBack.getText().toString();
+                JSONObject Json = new JSONObject();
+                if(TagFlag[0])
+                    Json.put("功能建议", "true");
+                else
+                    Json.put("功能建议", "false");
+                if(TagFlag[1])
+                    Json.put("使用问题", "true");
+                else
+                    Json.put("使用问题", "false");
+                if(TagFlag[2])
+                    Json.put("内容相关", "true");
+                else
+                    Json.put("内容相关", "false");
+                Json.put("反馈内容",feedback);
+                String content = String.valueOf(Json);
 
-                URL url = new URL("反馈地址");  //后面修改------------
+
+                URL url = new URL("https://iknow.gycis.me:8443/updateData/feedback");
                 HttpURLConnection connection =  (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setConnectTimeout(5000);
@@ -88,9 +108,9 @@ public class FeedbackPage extends AppCompatActivity {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
 
-                Log.i("Connection", feedback);
+                Log.i("Connection", content);
                 OutputStream os = connection.getOutputStream();
-                os.write(feedback.getBytes());
+                os.write(content.getBytes());
                 os.flush();
                 os.close();
 
@@ -98,6 +118,12 @@ public class FeedbackPage extends AppCompatActivity {
                 if (connection.getResponseCode() == 200) {
                     String result = StreamToString(connection.getInputStream());
                     Log.i("Connection", result);
+                    if(result.equals("Succeeded")){
+                        feedbackFlag = true;
+                    }
+                    else{
+                        feedbackFlag = false;
+                    }
                 }
                 else{
                     Log.i("Connection", "Fail");
@@ -125,4 +151,6 @@ public class FeedbackPage extends AppCompatActivity {
             return null;
         }
     }
+
+    public void goBack(View view){finish();}
 }

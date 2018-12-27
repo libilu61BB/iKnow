@@ -30,16 +30,18 @@ public class InitialPage extends AppCompatActivity {
                 else
                     gotoLoginPage();
             }
-        },3000);
+        },2000);
     }
 
     public void gotoPrivatePage() {
         Intent intent = new Intent(InitialPage.this, PrivatePage.class);
         startActivity(intent);
+        InitialPage.this.finish();
     }
 
     public void gotoLoginPage(){
         Intent intent = new Intent(InitialPage.this, LoginPage.class);
         startActivity(intent);
+        InitialPage.this.finish();
     }
 }
