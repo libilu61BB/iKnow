@@ -46,6 +46,7 @@ class User(db.Model):
         result = check_password_hash(self.password, password)
         return result
 
+
 #
 class Activity(db.Model):
     __tablename__ = 'ACTIVITY'
@@ -68,12 +69,14 @@ class Activity(db.Model):
     picture = db.Column('PICTURE',db.String(100))
     url = db.Column('URL',db.String(100))
 
+
 #
 class Calendar(db.Model):
     __tablename__ = 'CALENDAR'
     id = db.Column('CALENDARNO',db.Integer, primary_key=True, autoincrement=True)
     activityno = db.Column('ACTIVITYNO',db.Integer, db.ForeignKey('ACTIVITY.ACTIVITYNO'))
     userid = db.Column('USER_ID',db.Integer, db.ForeignKey('USER.USER_ID'))
+
 
 # register
 @app.route('/updateData/addNewUser', methods=['GET', 'POST'])
@@ -104,6 +107,7 @@ def register():
             db.session.commit()
             print('用户注册成功。')
             return 'register succeed'
+
 
 # add new activity
 @app.route('/updateData/addActivity', methods=['GET', 'POST'])
@@ -181,6 +185,7 @@ def changetag():
             print('用户' + username + '现有标签是' + text)
         return 'change tag succeed'  # 登陆成功
 
+
 # get user activity (+listening)
 @app.route('/downloadData/getPrivateActivity', methods=['GET', 'POST'])
 def getPrivateAc():
@@ -251,50 +256,39 @@ def getPrivateAc():
 
         print()
         print('用户' + username + '下载了个人日历，共'+str(len(PrivateAc))+'个活动！')
-        #print(js_PrivateAc)
         return json.dumps(js_PrivateAc)
 
 
-# 登录读取数据 (+监听)
+# get info after login (+listening)
 @app.route('/downloadData/loginDownload', methods=['GET', 'POST'])
 def loginDownload():
+    # get user from database
     if request.method == 'GET':
         return 'Failed'
     else:
         data2 = request.get_data()
         data2 = json.loads(data2)
         username = data2['Username']
-
         user = User.query.filter(User.username == username).first() #根据用户名字检索用户ID
-
         PrivateAcID = Calendar.query.filter(Calendar.userid == user.id).all()      #根据用户ID检索事件ID
-
         PrivateAc = []
         for a in range(0,len(PrivateAcID)):
             PrivateAc.append(Activity.query.filter(Activity.id == PrivateAcID[a-1].activityno).first())
 
+        # sort by time
         def getMyKey(elem):
             str1 = str(elem.year)
-            str2 = str(elem.month)
-            if len(str2) == 1:
-                str2 = '0' + str2
-            str3 = str(elem.day)
-            if len(str3) == 1:
-                str3 = '0' + str3
-            str4 = str(elem.start_hour)
-            if len(str4) == 1:
-                str4 = '0' + str4
-            str5 = str(elem.start_minute)
-            if len(str5) == 1:
-                str5 = '0' + str5
+            str2 = str(elem.month).zfill(2)
+            str3 = str(elem.day).zfill(2)
+            str4 = str(elem.start_hour).zfill(2)
+            str5 = str(elem.start_minute).zfill(2)
             return str1 + str2 + str3 + str4 + str5
-
         PrivateAc.sort(key = getMyKey)
 
+        # get user info
         js_user = {}
         js_PrivateAc = {}
         js_all = {}
-
         js_user['Department'] = user.department
         js_user['Tag1'] = user.tag1
         js_user['Tag2'] = user.tag2
@@ -307,7 +301,7 @@ def loginDownload():
         js_user['Tag9'] = user.tag9
         js_user['Tag10'] = user.tag10
 
-
+        # get user calendar
         for a in range(0,len(PrivateAc)):
             js_temp = {}
             Id = PrivateAc[a].id
@@ -352,17 +346,16 @@ def loginDownload():
         js_all['ActivityNumber'] = len(PrivateAc)
         js_all['Activity'] = js_PrivateAc
 
-
         print()
         print('用户'+username+'下载了所有个人数据：')
         print(js_all)
         return json.dumps(js_all)
 
 
-
-# 事件详情 (+监听)
+# get activity detail (+listening)
 @app.route('/downloadData/getDetail', methods=['GET', 'POST'])
 def getDetail():
+    # get activity from database
     if request.method == 'GET':
         return 'Failed'
     else:
@@ -370,9 +363,9 @@ def getDetail():
         data = json.loads(data)
         username = data['Username']
         ActivityID = data['ActivityID']
-
         Ac = Activity.query.filter(Activity.id == ActivityID).first()
 
+        # get activity info
         js_temp = {}
         Id = Ac.id
         Year = Ac.year
@@ -412,7 +405,6 @@ def getDetail():
         js_temp['Url'] = Url
 
         js_all = {}
-
         user = User.query.filter(User.username == username).first()
         calendar = Calendar.query.filter(Calendar.activityno == ActivityID,Calendar.userid == user.id).first()
 
@@ -421,15 +413,16 @@ def getDetail():
 
         js_all['Activity'] = js_temp
 
-
         print()
         print('用户'+username+'读取了事件ID为'+str(ActivityID)+'的事件详情')
         print(js_all)
         return json.dumps(js_all)
 
-# 反馈 (+监听)
+
+# user feedback (+listening)
 @app.route('/updateData/feedback', methods=['GET', 'POST'])
 def feedback():
+    # get feedback content
     if request.method == 'GET':
         return 'Failed'
     else:
@@ -440,20 +433,13 @@ def feedback():
         type3 = data['内容相关']
         content = data['反馈内容']
 
-
+        # print feedback
         print()
         print('收到反馈：')
         group = '类型包括'
-        if(type1 == 'true'):
-            group = group + '功能建议、'
-        else:
-            group = group + '、'
-
-        if(type2 == 'true'):
-            group = group + '使用问题、'
-
-        if(type3 == 'true'): group = group + '内容相关'
-
+        group = group + ('功能建议、' if type1=='true' else '、')
+        group = group + ('使用问题、' if type2=='true' else '')
+        group = group + ('内容相关' if type3=='true' else '')
         print(group)
         print('具体内容为：'+content)
         return 'Succeeded'
