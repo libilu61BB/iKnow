@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailPage">
+
+    tools:context=".ResultDetailPage">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,348 +14,289 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="404dp"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="155dp">
 
-            <LinearLayout
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <Button
+                    android:id="@+id/back_button"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/back"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/activityname"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="事件详情"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <Button
-                        android:id="@+id/back_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@android:color/white"
-                        android:text="返回"
-                        android:textSize="24sp" />
-                </LinearLayout>
+            </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/activityname"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Activityname"
-                        android:textAlignment="center"
-                        android:textSize="24sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="5px"
+                android:layout_marginLeft="5px"
+                android:background="@android:color/darker_gray"
+                android:orientation="horizontal">
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="事件名称："
-                        android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:paddingTop="10dp"
+                    android:text="事件名称："
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
 
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_toEndOf="@id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="12.5dp"
+                    android:textSize="18sp"
+                    android:layout_height="48dp" />
 
-                <LinearLayout
-                    android:layout_width="400dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
+            </RelativeLayout>
 
-            </LinearLayout>
+            <RelativeLayout
 
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="日期："
-                        android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingTop="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="活动日期："
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="400dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="开始时间："
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="400dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="结束时间："
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="400dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="地点："
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="400dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="主办方："
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="400dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_toEndOf="@id/textView4"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="12.5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:textSize="18sp"/>
 
-                    <Button
-                        android:id="@+id/tag1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="科创" />
+            </RelativeLayout>
 
-                    <Button
-                        android:id="@+id/tag2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="外语" />
-                </LinearLayout>
+            <RelativeLayout
 
-                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingTop="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="开始时间："
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:layout_toEndOf="@id/textView5"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="12.5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:textSize="18sp"/>
 
-                </LinearLayout>
+            </RelativeLayout>
 
-            </LinearLayout>
+            <RelativeLayout
 
-            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="50dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/textView6"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingTop="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="结束时间："
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv4"
+                    android:layout_toEndOf="@id/textView6"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:paddingTop="12.5dp"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingTop="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="活动地点："
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv5"
+                    android:layout_toEndOf="@id/textView7"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:paddingTop="12.5dp"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="5dp"
+                    android:paddingTop="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="主办方："
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv6"
+                    android:layout_toEndOf="@id/textView8"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="12.5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="简介："
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id = "@+id/detailbtnList"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="5dp"
+                android:orientation="horizontal">
+
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="200dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="推送链接："
-                    android:textSize="18sp" />
-            </LinearLayout>
+                android:id="@+id/textView10"
+                android:layout_width="90dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:paddingTop="10dp"
+                android:layout_centerVertical="true"
+                android:text="活动简介："
+                android:textAlignment="center"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv7"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:layout_height="200dp"
+                android:textSize="18sp"/>
 
-            <Button
-                android:id="@+id/last_button"
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="90dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:paddingTop="10dp"
+                android:text="推送链接："
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv8"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="从我的日程中删除此活动" />
+                android:layout_height="50dp"
+                android:paddingTop="12.5dp"
+                android:autoLink="web"
+                android:textSize="18sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/last_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/circle_button_shape"
+                    android:visibility="invisible"
+                    android:text="将此活动加入我的日历"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/background_light" />
+
+            </RelativeLayout>
+
 
         </LinearLayout>
     </ScrollView>
