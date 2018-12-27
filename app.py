@@ -46,6 +46,7 @@ class User(db.Model):
         result = check_password_hash(self.password, password)
         return result
 
+
 #
 class Activity(db.Model):
     __tablename__ = 'ACTIVITY'
@@ -68,12 +69,14 @@ class Activity(db.Model):
     picture = db.Column('PICTURE',db.String(100))
     url = db.Column('URL',db.String(100))
 
+
 #
 class Calendar(db.Model):
     __tablename__ = 'CALENDAR'
     id = db.Column('CALENDARNO',db.Integer, primary_key=True, autoincrement=True)
     activityno = db.Column('ACTIVITYNO',db.Integer, db.ForeignKey('ACTIVITY.ACTIVITYNO'))
     userid = db.Column('USER_ID',db.Integer, db.ForeignKey('USER.USER_ID'))
+
 
 # register
 @app.route('/updateData/addNewUser', methods=['GET', 'POST'])
@@ -104,6 +107,7 @@ def register():
             db.session.commit()
             print('用户注册成功。')
             return 'register succeed'
+
 
 # add new activity
 @app.route('/updateData/addActivity', methods=['GET', 'POST'])
@@ -181,6 +185,7 @@ def changetag():
             print('用户' + username + '现有标签是' + text)
         return 'change tag succeed'  # 登陆成功
 
+
 # get user activity (+listening)
 @app.route('/downloadData/getPrivateActivity', methods=['GET', 'POST'])
 def getPrivateAc():
@@ -251,50 +256,39 @@ def getPrivateAc():
 
         print()
         print('用户' + username + '下载了个人日历，共'+str(len(PrivateAc))+'个活动！')
-        #print(js_PrivateAc)
         return json.dumps(js_PrivateAc)
 
 
-# 登录读取数据 (+监听)
+# get info after login (+listening)
 @app.route('/downloadData/loginDownload', methods=['GET', 'POST'])
 def loginDownload():
+    # get user from database
     if request.method == 'GET':
         return 'Failed'
     else:
         data2 = request.get_data()
         data2 = json.loads(data2)
         username = data2['Username']
-
         user = User.query.filter(User.username == username).first() #根据用户名字检索用户ID
-
         PrivateAcID = Calendar.query.filter(Calendar.userid == user.id).all()      #根据用户ID检索事件ID
-
         PrivateAc = []
         for a in range(0,len(PrivateAcID)):
             PrivateAc.append(Activity.query.filter(Activity.id == PrivateAcID[a-1].activityno).first())
 
+        # sort by time
         def getMyKey(elem):
             str1 = str(elem.year)
-            str2 = str(elem.month)
-            if len(str2) == 1:
-                str2 = '0' + str2
-            str3 = str(elem.day)
-            if len(str3) == 1:
-                str3 = '0' + str3
-            str4 = str(elem.start_hour)
-            if len(str4) == 1:
-                str4 = '0' + str4
-            str5 = str(elem.start_minute)
-            if len(str5) == 1:
-                str5 = '0' + str5
+            str2 = str(elem.month).zfill(2)
+            str3 = str(elem.day).zfill(2)
+            str4 = str(elem.start_hour).zfill(2)
+            str5 = str(elem.start_minute).zfill(2)
             return str1 + str2 + str3 + str4 + str5
-
         PrivateAc.sort(key = getMyKey)
 
+        # get user info
         js_user = {}
         js_PrivateAc = {}
         js_all = {}
-
         js_user['Department'] = user.department
         js_user['Tag1'] = user.tag1
         js_user['Tag2'] = user.tag2
@@ -307,7 +301,7 @@ def loginDownload():
         js_user['Tag9'] = user.tag9
         js_user['Tag10'] = user.tag10
 
-
+        # get user calendar
         for a in range(0,len(PrivateAc)):
             js_temp = {}
             Id = PrivateAc[a].id
@@ -352,17 +346,16 @@ def loginDownload():
         js_all['ActivityNumber'] = len(PrivateAc)
         js_all['Activity'] = js_PrivateAc
 
-
         print()
         print('用户'+username+'下载了所有个人数据：')
         print(js_all)
         return json.dumps(js_all)
 
 
-
-# 事件详情 (+监听)
+# get activity detail (+listening)
 @app.route('/downloadData/getDetail', methods=['GET', 'POST'])
 def getDetail():
+    # get activity from database
     if request.method == 'GET':
         return 'Failed'
     else:
@@ -370,9 +363,9 @@ def getDetail():
         data = json.loads(data)
         username = data['Username']
         ActivityID = data['ActivityID']
-
         Ac = Activity.query.filter(Activity.id == ActivityID).first()
 
+        # get activity info
         js_temp = {}
         Id = Ac.id
         Year = Ac.year
@@ -412,7 +405,6 @@ def getDetail():
         js_temp['Url'] = Url
 
         js_all = {}
-
         user = User.query.filter(User.username == username).first()
         calendar = Calendar.query.filter(Calendar.activityno == ActivityID,Calendar.userid == user.id).first()
 
@@ -421,15 +413,16 @@ def getDetail():
 
         js_all['Activity'] = js_temp
 
-
         print()
         print('用户'+username+'读取了事件ID为'+str(ActivityID)+'的事件详情')
         print(js_all)
         return json.dumps(js_all)
 
-# 反馈 (+监听)
+
+# user feedback (+listening)
 @app.route('/updateData/feedback', methods=['GET', 'POST'])
 def feedback():
+    # get feedback content
     if request.method == 'GET':
         return 'Failed'
     else:
@@ -440,28 +433,22 @@ def feedback():
         type3 = data['内容相关']
         content = data['反馈内容']
 
-
+        # print feedback
         print()
         print('收到反馈：')
         group = '类型包括'
-        if(type1 == 'true'):
-            group = group + '功能建议、'
-        else:
-            group = group + '、'
-
-        if(type2 == 'true'):
-            group = group + '使用问题、'
-
-        if(type3 == 'true'): group = group + '内容相关'
-
+        group = group + ('功能建议、' if type1=='true' else '、')
+        group = group + ('使用问题、' if type2=='true' else '')
+        group = group + ('内容相关' if type3=='true' else '')
         print(group)
         print('具体内容为：'+content)
         return 'Succeeded'
 
 
-# 根据标签检索事件（公共日历） (+监听)
+# search for activities according to tag(for public activity)(+listening)
 @app.route('/downloadData/getAcByTag', methods=['GET', 'POST'])
 def getAcByTag():
+    # get tag
     if request.method == 'GET':
         return 'Failed'
     else:
@@ -469,47 +456,38 @@ def getAcByTag():
         data = json.loads(data)
         username = data['Username']
         date = data['Date']
-
-
-
         ac_year = int(date[0:4])
         ac_month = int(date[4:6])
         ac_day = int(date[6:8])
 
-        print()
-        print('用户'+username+'搜索了'+date+'的公共日历')
+        print('\n 用户'+username+'搜索了'+date+'的公共日历')
 
-
+        # get user from database
         user = User.query.filter(User.username == username).first() #根据用户名字检索用户ID
 
         Ac = []
         Ac = (Activity.query.filter(
            or_(
-
                 Activity.tag1 == user.tag1, Activity.tag1 == user.tag2, Activity.tag1 == user.tag3, Activity.tag1 == user.tag4, Activity.tag1 == user.tag5, Activity.tag1 == user.tag6, Activity.tag1 == user.tag7, Activity.tag1 == user.tag8, Activity.tag1 == user.tag9, Activity.tag1 == user.tag10,
                 Activity.tag2 == user.tag1, Activity.tag2 == user.tag2, Activity.tag2 == user.tag3, Activity.tag2 == user.tag4, Activity.tag2 == user.tag5, Activity.tag2 == user.tag6, Activity.tag2 == user.tag7, Activity.tag2 == user.tag8, Activity.tag2 == user.tag9, Activity.tag2 == user.tag10,
                 Activity.tag3 == user.tag1, Activity.tag3 == user.tag2, Activity.tag3 == user.tag3, Activity.tag3 == user.tag4, Activity.tag3 == user.tag5, Activity.tag3 == user.tag6, Activity.tag3 == user.tag7, Activity.tag3 == user.tag8, Activity.tag3 == user.tag9, Activity.tag3 == user.tag10,
                 Activity.department == user.department
-
             ),
             Activity.year == ac_year,
             Activity.month == ac_month,
             Activity.day == ac_day
-
         ).all())
 
-
+        # function for get time
         def getMyKey(elem):
-            str4 = str(elem.start_hour)
-            if len(str4) == 1:
-                str4 = '0' + str4
-            str5 = str(elem.start_minute)
-            if len(str5) == 1:
-                str5 = '0' + str5
+            str4 = str(elem.start_hour).zfill(2)
+            str5 = str(elem.start_minute).zfill(2)
             return str4 + str5
 
+        # sort activity according to date
         Ac.sort(key = getMyKey)
 
+        # get search result detail
         js_Ac = {}
         js_all = {}
         for a in range(0,len(Ac)):
@@ -553,8 +531,6 @@ def getAcByTag():
             js_temp['Url'] = Url
             js_Ac['Activity'+str(a+1)] = js_temp
 
-
-
         js_all['ActivityNumber'] = len(Ac)
         js_all['Activity'] = js_Ac
 
@@ -564,11 +540,10 @@ def getAcByTag():
         else:
             print('无搜索结果')
 
-
         return json.dumps(js_all)
 
 
-# 根据关键词检索事件
+# search for activities according to key words
 @app.route('/downloadData/getAcByKeywords', methods=['GET', 'POST'])
 def getAcByKeywords():
     if request.method == 'GET':
@@ -586,8 +561,6 @@ def getAcByKeywords():
         date = int(date)
         group = int(group)
 
-
-
         if int(group/1000) == 0:
             Gr1_1 = date-1
             Gr1_2 = 99999999
@@ -600,7 +573,6 @@ def getAcByKeywords():
         else :
             Gr1_1 = date+15
             Gr1_2 = 99999999
-
 
         def editDate(a):
             if int(a) == 99999999:
@@ -628,10 +600,8 @@ def getAcByKeywords():
 
             return y*10000 + m*100 + d
 
-
         Date1 = editDate(Gr1_1)
         Date2 = editDate(Gr1_2)
-
 
         if int(group%1000/100) == 0:
             Gr2_1 = 0
@@ -652,14 +622,11 @@ def getAcByKeywords():
         TagList = ['科创','计算机','体育','实践','外语','经济','创业','文学','电影','志愿','艺术','讲座','学生节','展览','赛事','演出','全部']
         Gr3 = TagList[group%100]
 
-
-        print()
-        print('搜索了关键词为'+keywords+'的所有活动：')
-
-
+        print('\n 搜索了关键词为'+keywords+'的所有活动：')
 
         keywords = str(keywords)
 
+        # get activity info
         Ac = []
         Ac = (Activity.query.filter(
            or_(
@@ -673,35 +640,24 @@ def getAcByKeywords():
                 Activity.department.contains(keywords),
                 Activity.introduction.contains(keywords)
             ),
-
             Activity.year * 10000 + Activity.month * 100 + Activity.day >= Date1,
             Activity.year * 10000 + Activity.month * 100 + Activity.day <= Date2,
             calculateTime(Activity.start_hour,Activity.start_minute,Activity.end_hour,Activity.end_minute) > Gr2_1,
             calculateTime(Activity.start_hour,Activity.start_minute,Activity.end_hour,Activity.end_minute) <= Gr2_2,
-
             or_(
                 Activity.tag1 == Gr3,
                 Activity.tag2 == Gr3,
                 Activity.tag3 == Gr3,
                 Gr3 == '全部'
             )
-
         ).all())
 
     def getMyKey(elem):
             str1 = str(elem.year)
-            str2 = str(elem.month)
-            if len(str2) == 1:
-                str2 = '0' + str2
-            str3 = str(elem.day)
-            if len(str3) == 1:
-                str3 = '0' + str3
-            str4 = str(elem.start_hour)
-            if len(str4) == 1:
-                str4 = '0' + str4
-            str5 = str(elem.start_minute)
-            if len(str5) == 1:
-                str5 = '0' + str5
+            str2 = str(elem.month).zfill(2)
+            str3 = str(elem.day).zfill(2)
+            str4 = str(elem.start_hour).zfill(2)
+            str5 = str(elem.start_minute).zfill(2)
             return str1 + str2 + str3 + str4 + str5
 
     Ac.sort(key = getMyKey)
@@ -761,11 +717,10 @@ def getAcByKeywords():
     return json.dumps(js_all)
 
 
-
-
-# 登录页面，用户将登录账号密码提交到数据库，如果数据库中存在该用户的用户名及id，返回首页
+# login
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    # get user's username and password
     if request.method == 'GET':
         return 'wrong method'
     else:
@@ -773,28 +728,24 @@ def login():
         data = json.loads(data)
         username = data['Username']
         password = data['Password']
-        user = User.query.filter(User.username == username).first()
 
-        if user:
-            if user.check_password(password):
-                #session['user'] = username
-                #session['id'] = user.id
-                #session.permanent = True
-                print()
-                print('用户'+username+'登录成功！')
+        user = User.query.filter(User.username == username).first()# check if username exists
+        if user:# user exists
+            if user.check_password(password):#check password
+                print('\n 用户'+username+'登录成功！')
                 return 'login succeed'  # 登陆成功
             else:
                 print()
                 print('用户'+username+'登录失败，密码错误！')
                 return 'password is wrong'
         else:
-            return 'username is not existed'
+            return 'username is not existed' # username is not existed
 
 
-
-# 修改密码
+# change password
 @app.route('/updateData/changePassword', methods=['GET', 'POST'])
 def edit_password():
+    # get user's username, oldpassword and new password
     if request.method == 'GET':
         return 'wrong method'
     else:
@@ -807,11 +758,9 @@ def edit_password():
         newpassword = data['NewPassword']
         user = User.query.filter(User.username == username).first()
 
-        if user.check_password(password):
+        if user.check_password(password): # check old password
             db.session.query(User).filter(User.username == username).update({"password" : generate_password_hash(newpassword)})
-            #db.session.user.update({"password" : generate_password_hash(newpassword)})
             db.session.commit()
-
             print('用户'+username+'修改了密码！')
             return 'change password succeed'  # 登陆成功
         else:
@@ -819,7 +768,7 @@ def edit_password():
 
             return 'password is wrong'
 
-# 删除个人日历
+# delete activity from personal calendar
 @app.route('/updateData/deletePrivateActivity', methods=['GET', 'POST'])
 def deletePrivateActivity():
     if request.method == 'GET':
@@ -830,19 +779,16 @@ def deletePrivateActivity():
         username = data['Username']
         activityID = data['ActivityID']
 
+        # get the activity from user's calendar
         user = User.query.filter(User.username == username).first()
-
         calendar = Calendar.query.filter(Calendar.userid == user.id,Calendar.activityno == activityID).first()
         db.session.delete(calendar)
         db.session.commit()
-
-        print()
-        print('用户'+str(username)+'在个人日历中删除了事件ID为'+str(activityID)+'的活动！')
-
+        print('\n 用户'+str(username)+'在个人日历中删除了事件ID为'+str(activityID)+'的活动！')
         return 'delete succeed'
 
 
-# 添加个人日历
+# add activity to personal calendar
 @app.route('/updateData/addPrivateActivity', methods=['GET', 'POST'])
 def addPrivateActivity():
     if request.method == 'GET':
@@ -852,37 +798,25 @@ def addPrivateActivity():
         data = json.loads(data)
         username = data['Username']
         activityID = data['ActivityID']
-
         user = User.query.filter(User.username == username).first()
-
         c = Calendar.query.filter(Calendar.activityno == activityID, Calendar.userid == user.id).first()
         print(c)
 
-
-        if c:
-
-            print()
-            print('用户'+username+'的个人日历中已经存在事件ID为'+str(activityID)+'的事件！')
+        if c: # activity exists in personal calendar
+            print('\n 用户'+username+'的个人日历中已经存在事件ID为'+str(activityID)+'的事件！')
             print('请管理员检查数据库！')
-
             return 'add failed'
-
 
         else:
             calendar = Calendar(activityno = activityID, userid = user.id)
             db.session.add(calendar)
             db.session.commit()
 
-            print()
-            print('用户'+username+'在个人日历中添加了事件ID为'+str(activityID)+'的事件！')
+            print('\n 用户'+username+'在个人日历中添加了事件ID为'+str(activityID)+'的事件！')
             return 'add succeed'
 
 
-
-
-
-
-# 修改院系
+# change department
 @app.route('/updateData/changeDepartment', methods=['GET', 'POST'])
 def edit_department():
     if request.method == 'GET':
@@ -893,17 +827,13 @@ def edit_department():
         username = data['Username']
         newdepartment = data['NewDepartment']
 
-        #aaa=User.query.filter(User.id == userid)
-        #user=aaa.first()
         db.session.query(User).filter(User.username == username).update({"department" : newdepartment})
         db.session.commit()
 
-        print()
-        print('用户'+username+'修改院系成功！')
-
+        print('\n 用户'+username+'修改院系成功！')
         return 'change department succeed'
 
-# 取得院系信息
+# get user's department
 @app.route('/downloadData/getDepartment', methods=['GET', 'POST'])
 def getDepartment():
     if request.method == 'GET':
@@ -912,111 +842,12 @@ def getDepartment():
         data = request.get_data()
         data = json.loads(data)
         username = data['Username']
-
-        user = User.query.filter(User.username == username).first()
-
-        print()
-        print('用户'+username+'获取了院系信息！')
+        user = User.query.filter(User.username == username).first() # get user
+        print('\n 用户'+username+'获取了院系信息！')
 
         js = {}
         js['Department'] = user.department
-
         return json.dumps(js)
-
-# 将数据库查询结果传递到前端页面 Question.query.all(),问答排序
-@app.route('/')
-def index():
-    context = {
-        'questions': Question.query.order_by('-time').all()
-    }
-    return render_template('index.html', **context)
-
-# 定义上下文处理器
-@app.context_processor
-def mycontext():
-    usern = session.get('user')
-    if usern:
-        return {'username': usern}
-    else:
-        return {}
-
-
-# 定义发布前登陆装饰器
-def loginFrist(func):
-    @wraps(func)
-    def wrappers(*args, **kwargs):
-        if session.get('user'):
-            return func(*args, **kwargs)
-        else:
-            return redirect(url_for('login'))
-
-    return wrappers
-
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('index'))
-
-
-
-
-
-# 问答页面
-@app.route('/question', methods=['GET', 'POST'])
-@loginFrist
-def question():
-    if request.method == 'GET':
-        return render_template('question.html')
-    else:
-        title = request.form.get('title')
-        detail = request.form.get('detail')
-        classify = request.form.get('classify')
-        author_id = User.query.filter(User.username == session.get('user')).first().id
-        question = Question(title=title, detail=detail,classify=classify, author_id=author_id)
-        db.session.add(question)
-        db.session.commit()
-    return redirect(url_for('index'))  # 重定向到登录页
-
-
-@app.route('/detail/<question_id>')
-def detail(question_id):
-    quest = Question.query.filter(Question.id == question_id).first()
-    comments = Comment.query.filter(Comment.question_id == question_id).all()
-    return render_template('detail.html', ques=quest, comments=comments)
-
-
-# 读取前端页面数据，保存到数据库中
-@app.route('/comment/', methods=['POST'])
-@loginFrist
-def comment():
-    comment = request.form.get('new_comment')
-    ques_id = request.form.get('question_id')
-    auth_id = User.query.filter(User.username == session.get('user')).first().id
-    comm = Comment(author_id=auth_id, question_id=ques_id, detail=comment)
-    db.session.add(comm)
-    db.session.commit()
-    return redirect(url_for('detail', question_id=ques_id))
-
-
-# 修改密码
-@app.route('/edit_password/', methods=['GET', 'POST'])
-def aedit_password():
-    if request.method == 'GET':
-        return render_template("edit_password.html")
-    else:
-        newpassword = request.form.get('password')
-        user = User.query.filter(User.id == session.get('id')).first()
-        user.password = newpassword
-        db.session.commit()
-        return redirect(url_for('index'))
-
-
-# 等待
-@app.route('/wait')
-def wait():
-    if request.method == 'GET':
-        return render_template("wait.html")
 
 
 if __name__ == '__main__':
