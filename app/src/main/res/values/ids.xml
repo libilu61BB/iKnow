@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="dateSelect_btn" />
+    <item type="id" name="timeSelect_btn" />
+    <item type="id" name="classificaitonSelect_btn" />
+    <item type="id" name="firstDateSelect_btn" />
+    <item type="id" name="secondDateSelect_btn" />
+    <item type="id" name="thirdDateSelect_btn" />
+    <item type="id" name="forthDateSelect_btn" />
+    <item type="id" name="firstTimeSelect_btn" />
+    <item type="id" name="secondTimeSelect_btn" />
+    <item type="id" name="thirdTimeSelect_btn" />
+    <item type="id" name="forthTimeSelect_btn" />
+    <item type="id" name="blank_btn" />
+</resources>

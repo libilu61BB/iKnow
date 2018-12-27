@@ -139,9 +139,23 @@
         android:visibility="invisible"
         android:layout_below="@id/Password2"/>
 
+    <TextView
+        android:id="@+id/registerSucceed"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Password2"
+        android:layout_centerHorizontal="true"
+        android:text="注册成功！"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="15sp"
+        android:visibility="invisible" />
+
     <Button
         android:id="@+id/Register"
         android:layout_width="200dp"
+        android:layout_marginTop="5dp"
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_register"

@@ -78,6 +78,7 @@ public class LoginPage extends AppCompatActivity {
                     }
                     Intent intent = new Intent(LoginPage.this, PrivatePage.class);
                     startActivity(intent);
+                    LoginPage.this.finish();
                 }
             }
         });
